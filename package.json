@@ -1,0 +1,23 @@
+{
+  "name": "spiderman-addon",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "folders": "bedrock-build folders",
+    "build": "bedrock-build build",
+    "watch": "bedrock-build watch",
+    "deploy": "bedrock-build deploy",
+    "deploy:watch": "bedrock-build deploy --watch",
+    "pack": "bedrock-build pack",
+    "release": "bedrock-build build --release"
+  },
+  "dependencies": {
+    "@minecraft/server": "^2.7.0",
+    "@minecraft/server-ui": "^2.0.0"
+  },
+  "devDependencies": {
+    "@keyyard/bedrock-build": "^1.1.0",
+    "typescript": "^6.0.3"
+  }
+}

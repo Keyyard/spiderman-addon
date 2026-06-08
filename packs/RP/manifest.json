@@ -1,0 +1,43 @@
+{
+  "format_version": 2,
+  "metadata": {
+    "product_type": "addon"
+  },
+  "header": {
+    "description": "Generated from npx create-mc-bedrock",
+    "name": "spiderman-addon RP",
+    "uuid": "dfef70ab-f956-4739-ade7-0cc5cb53c6d7",
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ],
+    "version": [
+      1,
+      0,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "5f32243c-6c3a-44ae-aaae-44c21f7d4c1f",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "description": "Generated from npx create-mc-bedrock"
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "45497f70-1a7d-4501-9a66-dc4c85d2f2e5",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

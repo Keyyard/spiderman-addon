@@ -1,0 +1,59 @@
+{
+  "format_version": 2,
+  "metadata": {
+    "product_type": "addon"
+  },
+  "header": {
+    "description": "Generated from npx create-mc-bedrock",
+    "name": "spiderman-addon BP",
+    "uuid": "45497f70-1a7d-4501-9a66-dc4c85d2f2e5",
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ],
+    "version": [
+      1,
+      0,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "4bf67c38-aae0-4ab5-881f-a9b36a912275",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "description": "Generated from npx create-mc-bedrock"
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/main.js",
+      "uuid": "81ba57ef-75d5-46b9-9259-a52dca07b9c6",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "description": "Generated from npx create-mc-bedrock"
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.19.0"
+    },
+    {
+      "uuid": "dfef70ab-f956-4739-ade7-0cc5cb53c6d7",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
