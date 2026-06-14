@@ -230,7 +230,7 @@ export function handleWorldLoad() {
     });
 }
 
-export function handleLoadcuriosData(s) {
+export function handleLoadCuriosData(s) {
     if (compiled_data[s.id]) {
         compiled_data[s.id] += s.message;
     } else {
@@ -264,7 +264,7 @@ export function handleLoadcuriosData(s) {
     }
 }
 
-export function handlecuriosEvent(s) {
+export function handleCuriosEvent(s) {
     if (s.id === "curios:update") {
         system.run(() => updateAccessories(s.message));
     } else if (s.id === "curios:update_item") {
