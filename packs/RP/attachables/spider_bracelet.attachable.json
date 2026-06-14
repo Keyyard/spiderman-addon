@@ -1,0 +1,26 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:attachable": {
+		"description": {
+			"identifier": "nvy:spider_bracelet",
+			"materials": {
+				"default": "entity_alphatest",
+				"enchanted": "entity_alphatest_glint"
+			},
+			"textures": {
+				"default": "textures/items/spider_bracelet",
+				"enchanted": "textures/misc/enchanted_actor_glint"
+			},
+			"geometry": {
+				"default": "geometry.spider_bracelet"
+			},
+			"scripts": {
+				"animate": [ "equip" ]
+			},
+			"animations": {
+				"equip": "animation.spider_bracelet.equip"
+			},
+			"render_controllers": [ "controller.render.default" ]
+		}
+	}
+}

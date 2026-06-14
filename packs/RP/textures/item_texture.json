@@ -1,5 +1,12 @@
 {
   "resource_pack_name": "vanilla",
   "texture_name": "atlas.items",
-  "texture_data": {}
+  "texture_data": {
+    "spider_bracelet": {
+      "textures": "textures/items/spider_bracelet"
+    },
+    "curios": {
+      "textures": "textures/items/curios"
+    }
+  }
 }

@@ -13,6 +13,7 @@ import {
     player_curios_in_mainhand,
     playerList
 } from "./CuriosAPI";
+import "./grapple";
 
 
 world.afterEvents.worldLoad.subscribe(() => {

@@ -1,0 +1,19 @@
+{
+	"format_version": "1.21.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "nvy:curios",
+			"menu_category": {
+				"category": "items"
+			}
+		},
+		"components": {
+			"minecraft:icon": "curios",
+			"minecraft:display_name": {
+				"value": "item.nvy:curios.name"
+			},
+			"minecraft:max_stack_size": 1,
+			"minecraft:can_destroy_in_creative": false
+		}
+	}
+}

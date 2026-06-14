@@ -1,0 +1,22 @@
+{
+	"format_version": "1.21.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "nvy:spider_bracelet",
+			"menu_category": {
+				"category": "equipment"
+			}
+		},
+		"components": {
+			"minecraft:icon": "spider_bracelet",
+			"minecraft:display_name": {
+				"value": "item.nvy:spider_bracelet.name"
+			},
+			"minecraft:max_stack_size": 1,
+			"minecraft:hand_equipped": true,
+			"minecraft:tags": {
+				"tags": [ "curios:is_bracelet" ]
+			}
+		}
+	}
+}

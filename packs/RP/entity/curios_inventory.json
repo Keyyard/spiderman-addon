@@ -1,0 +1,18 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "nvy:curios_inventory",
+			"materials": {
+				"default": "entity_alphatest"
+			},
+			"textures": {
+				"default": "textures/entity/curios_inventory"
+			},
+			"geometry": {
+				"default": "geometry.curios_inventory"
+			},
+			"render_controllers": [ "controller.render.default" ]
+		}
+	}
+}

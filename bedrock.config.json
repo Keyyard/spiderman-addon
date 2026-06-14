@@ -5,13 +5,13 @@
     "bp": "packs/BP",
     "rp": "packs/RP"
   },
-  "entry": "src/main.ts",
+  "entry": "src/main.js",
   "out": "dist",
   "deploy": {
     "target": "retail",
     "customPath": null
   },
   "minecraft": {
-    "serverVersion": "1.19.0"
+    "serverVersion": "2.0.0"
   }
 }
