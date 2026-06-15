@@ -383,6 +383,7 @@ export function handlePlayerJoin(s) {
     let player = s.player;
     const playerId = player.id;
     updateAccessories(playerId);
+
     if (!player.getDynamicProperty("has_curios")) {
         player.setDynamicProperty("has_curios", true);
         let inventory = player.getComponent("minecraft:inventory").container;
@@ -392,6 +393,7 @@ export function handlePlayerJoin(s) {
             inventory.setItem(8, curiosItem);
         }
     }
+
     let equipable = player.getComponent("minecraft:equippable");
     let mainhand = equipable.getEquipmentSlot(EquipmentSlot.Mainhand);
     if (mainhand.hasItem() && mainhand.typeId == "nvy:curios" && mainhand.lockMode == "slot") {
@@ -400,6 +402,23 @@ export function handlePlayerJoin(s) {
     player_curios_in_mainhand[player.id] = mainhand.isValid && mainhand.hasItem() && mainhand.typeId == "nvy:curios";
 
     playerList = world.getAllPlayers();
+
+    // --- ADDED: Re-trigger Equip Events on Join ---
+    // We wait 20 ticks (1 second) to ensure structures and player data are fully loaded
+    system.runTimeout(() => {
+        if (!player.isValid) return;
+        const equipEvents = player_curios_equip_events[playerId];
+        if (equipEvents) {
+            equipEvents.forEach((funcName, index) => {
+                if (funcName && curiosEquipRegistry[funcName]) {
+                    try { 
+                        // Pass true because this IS an initial load on join
+                        curiosEquipRegistry[funcName](player, index, true); 
+                    } catch (e) { }
+                }
+            });
+        }
+    }, 20);
 }
 
 export function handlePlayerLeave(s) {
@@ -602,8 +621,12 @@ export function tickPlayerLoop() {
                             player_curios_unequip_events[pid][i] = unequipTag ? unequipTag.split(":")[2] : undefined;
                             player_curios_death_events[pid][i] = deathTag ? deathTag.split(":")[2] : undefined;
 
-                            if (newEquipFunc && curiosEquipRegistry[newEquipFunc]) {
-                                try { curiosEquipRegistry[newEquipFunc](playerData, i); } catch (e) { }
+                            if (newEquipFunc && curiosEquipRegistry[newEquipFunc]) 
+                            {
+                                try { 
+                                    // Pass false because this is a manual equip, not a join load
+                                    curiosEquipRegistry[newEquipFunc](playerData, i, false); 
+                                } catch (e) { }
                             }
                         } else {
                             if (player_curios_equip_events[pid]) player_curios_equip_events[pid][i] = undefined;

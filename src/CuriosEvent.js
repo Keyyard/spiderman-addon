@@ -5,8 +5,14 @@ import { curiosEquipRegistry, curiosUnequipRegistry } from "./CuriosAPI.js";
 // --- SPIDER BRACELET LOGIC ---
 const activeSpiders = new Set();
 
-curiosEquipRegistry["spider_logic"] = (player, slotIndex) => {
-    player.sendMessage("§bSpider Bracelet Equipped!");
+curiosEquipRegistry["spider_logic"] = (player, slotIndex, isInitialLoad) => {
+    
+    // Only send message if the player manually put it in (not on join)
+    if (isInitialLoad === false) {
+        player.sendMessage("§bSpider Bracelet Equipped!");
+    }
+    
+    // Always add to the set so the effect loop works
     activeSpiders.add(player.id);
 };
 
@@ -35,7 +41,8 @@ system.runInterval(() => {
 // --- HOLY VOICE LOGIC ---
 const holyTimers = new Map();
 
-curiosEquipRegistry["HolyVoice"] = (player, slot) => {
+// Do the same for Holy Voice if you want to hide its message too
+curiosEquipRegistry["HolyVoice"] = (player, slot, isInitialLoad) => {
     const key = `${player.id}:${slot}`;
     if (holyTimers.has(key)) system.clearRun(holyTimers.get(key));
 
@@ -47,7 +54,10 @@ curiosEquipRegistry["HolyVoice"] = (player, slot) => {
     }, 100);
 
     holyTimers.set(key, id);
-    player.onScreenDisplay.setActionBar("§7Divine connection established...");
+
+    if (isInitialLoad === false) {
+        player.onScreenDisplay.setActionBar("§7Divine connection established...");
+    }
 };
 
 curiosUnequipRegistry["HolyVoice"] = (player, slot) => {
