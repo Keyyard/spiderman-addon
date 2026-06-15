@@ -43,11 +43,14 @@ export const TagToRegister = {
     "curios:is_spellbook": "Spellbook",
     "curios:is_charm": "Charm",
 
+    "curios:EventEquip": "EventEquip",
+    "curios:EventUnequip": "EventUnequip",
     "curios:EventDeath": "EventDeath",
     "curios:ForceSoulbind": "ForceSoulbind"
 };
 
 // Map to store function callbacks from other scripts
+// bind those event at the update/event 
 export const curiosDeathRegistry = {}; 
 export const curiosEquipRegistry = {}; 
 export const curiosUnequipRegistry = {}; 
@@ -421,8 +424,6 @@ export function tickPlayerLoop() {
         const dimension = playerData.dimension;
 
         // --- SECTION 1: CURSOR ITEM PROTECTION ---
-        // Checks if the player is currently "holding" the Curio Menu item with their mouse/touch.
-        // This prevents the API from deleting the item or thinking the player doesn't have one.
         let cursor = playerData.getComponent("minecraft:cursor_inventory");
         if (cursor.item == undefined || cursor.item.typeId != "nvy:curios") {
             player_has_curios_in_cursor[pid] = false;
@@ -431,24 +432,20 @@ export function tickPlayerLoop() {
             player_has_curios_temp[pid] = true;
         }
 
-        // Initialize item name list for tracking state changes
         if (player_curios_list_item_name[pid] == undefined) player_curios_list_item_name[pid] = [];
 
         // --- SECTION 2: INVENTORY MAINTENANCE ---
-        // To prevent lag, we only scan 6 slots of the player's inventory per tick (using 'part').
         try {
             let part = system.currentTick % 6; 
             let inventory = playerData.getComponent("minecraft:inventory").container;
             let insert_curios = false;
 
-            // Give the player a Curio Menu item if their inventory is totally empty
             if (inventory.emptySlotsCount == 36) {
                 if (!player_has_curios_in_cursor[pid]) {
                     inventory.addItem(curiosItem);
                     insert_curios = true;
                 }
             } else {
-                // Periodically check if the player has lost their Curio Menu item and give a new one
                 if (part == 0 && player_has_curios[pid] != undefined && player_has_curios[pid] === false && inventory.emptySlotsCount > 0 && !player_has_curios_in_cursor[pid]) {
                     inventory.addItem(curiosItem);
                     insert_curios = true;
@@ -460,48 +457,27 @@ export function tickPlayerLoop() {
                 player_has_curios_temp[pid] = false;
             }
 
-            // --- SECTION 3: DYNAMIC LORE / TOOLTIPS ---
-            // Scans items in the player's inventory and adds "Slot: [Category]" to their lore 
-            // so players know where to equip the curios.
+            // --- SECTION 3: DYNAMIC LORE ---
             for (let i = 0; i < 6; i++) {
                 let item = inventory.getSlot(i + part * 6);
                 if (item.hasItem() && item != undefined && item_category[item.typeId] != undefined) {
-                    let has_desc = false;
                     let lores = item.getLore();
-                    for (let lore of lores) {
-                        if (lore.startsWith("§r§6Slot:§e ")) {
-                            has_desc = true;
-                            break;
-                        }
-                    }
-                    if (!has_desc) {
-                        if (item_category[item.typeId].length == 1) {
-                            lores.unshift("§r§6Slot:§e " + item_category[item.typeId][0]);
-                        } else {
-                            let slot_name = "§r§6Slot:§e";
-                            item_category[item.typeId].forEach(category => {
-                                slot_name += " " + category;
-                            });
-                            lores.unshift(slot_name);
-                        }
+                    if (!lores.some(l => l.startsWith("§r§6Slot:§e "))) {
+                        let slot_name = "§r§6Slot:§e " + item_category[item.typeId].join(" ");
+                        lores.unshift(slot_name);
                         item.setLore(lores);
                     }
                 }
-                // Remove duplicate Curio Menu items if the player has more than one
                 if (item.hasItem() && item.typeId == "nvy:curios") {
-                    if (player_has_curios_temp[pid]) {
-                        inventory.setItem(i + part * 6);
-                    } else {
-                        player_has_curios_temp[pid] = true;
-                    }
+                    if (player_has_curios_temp[pid]) { inventory.setItem(i + part * 6); } 
+                    else { player_has_curios_temp[pid] = true; }
                 }
             }
         } catch (error) { }
 
         player_list_id.push(pid);
 
-        // --- SECTION 4: MENU ENTITY (THE UI) ---
-        // If the player is holding the Curio item, spawn an invisible entity that acts as the container.
+        // --- SECTION 4: MENU ENTITY ---
         const force_remove = !player_curios_in_mainhand[pid];
         if (player_curios_in_mainhand[pid]) {
             const curios_id = playerData.getDynamicProperty("curios-id");
@@ -512,7 +488,6 @@ export function tickPlayerLoop() {
                 entity.setDynamicProperty("curios-source-id", pid);
                 playerData.setDynamicProperty("curios-id", entity.id);
             } else {
-                // Teleport the invisible container entity in front of the player's face
                 const entity = world.getEntity(curios_id);
                 if (entity) {
                     entity.teleport(Vector.add(playerData.getHeadLocation(), Vector.multiply(playerData.getViewDirection(), 0.5)));
@@ -522,26 +497,19 @@ export function tickPlayerLoop() {
             }
         }
 
-        // --- SECTION 5: CONTAINER INTERACTION & SAVING ---
-        // Logic for when the container is open or when the player stops holding the menu item.
+        // --- SECTION 5 & 6: CONTAINER INTERACTION & REWRITTEN LOGIC ---
         if (curios_is_used[pid] != undefined) {
             const used_entity = curios_is_used[pid];
             const used_entity_valid = used_entity.isValid;
             curios_container[pid] = used_entity_valid ? used_entity.getComponent("minecraft:inventory")?.container : undefined;
             
-            // Handle closing the inventory or switching items
             if (!used_entity_valid || !used_entity.getProperty("nvy:open_inv") || force_remove) {
                 if (used_entity_valid && (!used_entity.getProperty("nvy:open_inv") || force_remove)) {
                     const container = used_entity.getComponent("minecraft:inventory").container;
-                    // Save the current state of items into the player's data
                     for (let i = 0; i < ACCESSORIES_LENGTH; i++) {
                         const item = container.getItem(i);
-                        if (item != undefined) {
-                            player_curios_data[pid][i] = item.typeId;
-                            player_curios_is_keep_on_death[pid][i] = item.keepOnDeath;
-                        } else {
-                            player_curios_data[pid][i] = undefined;
-                        }
+                        player_curios_data[pid][i] = item?.typeId;
+                        player_curios_is_keep_on_death[pid][i] = item?.keepOnDeath ?? false;
                     }
                     used_entity.runCommand("scriptevent curios:update " + pid);
                     playerData.getComponent("minecraft:inventory").container.setItem(player_index_select[pid], curiosItem);
@@ -550,34 +518,75 @@ export function tickPlayerLoop() {
                 curios_container[pid] = undefined;
                 delete saved_tag_list_per_slot[pid];
             } else {
-                // --- SECTION 6: THE ACTIVE CONTENT LOOP ---
-                // This part runs while the Curio menu is OPEN. 
-                // It handles auto-sorting, item limits, and EQUIP/UNEQUIP events.
-                if (!used_entity_valid) return;
+                // --- THE REWRITTEN LOOP ---
                 const location = Vector.round(playerData.location);
                 location.y = 0;
                 let inventory = used_entity.getComponent("minecraft:inventory");
                 let container = inventory.container;
 
                 let tag_list_per_slot = { "Face": {}, "Hat": {}, "Necklace": {}, "Bracelet": {}, "Back": {}, "Hand": {}, "Belt": {}, "Foot": {}, "Spellbook": {}, "Trinket": {}, "Charm": {} };
-                if (saved_tag_list_per_slot[pid] == undefined) {
-                    saved_tag_list_per_slot[pid] = { ...tag_list_per_slot };
-                }
+                if (saved_tag_list_per_slot[pid] == undefined) saved_tag_list_per_slot[pid] = { ...tag_list_per_slot };
 
                 for (let i = 0; i < ACCESSORIES_LENGTH; i++) {
                     let item = container.getItem(i);
                     const oldItemId = player_curios_list_item_name[pid][i];
+                    let isItemValid = true;
 
-                    // --- EQUIP / UNEQUIP EVENT TRIGGER ---
-                    if (item?.typeId !== oldItemId) {
+                    // 1. VALIDATION: CATEGORY CHECK
+                    if (item != undefined && !curios_database.register[ACCESORIES_SLOT_INT[i]].includes(item.typeId)) {
+                        let swaped = false;
+                        const categories = item_category[item.typeId];
+                        if (categories != undefined) {
+                            for (const category of categories) {
+                                for (const slot of AccesoriesSlotInt[category]) {
+                                    if (container.getItem(slot) == undefined) {
+                                        container.swapItems(i, slot, container);
+                                        swaped = true;
+                                        break;
+                                    }
+                                }
+                                if (swaped) break;
+                            }
+                        }
+                        if (!swaped) { dimension.spawnItem(item, playerData.location); }
+                        container.setItem(i); // Clear the wrong slot
+                        item = undefined;     // Prevent events from firing
+                        isItemValid = false;
+                    }
+
+                    // 2. VALIDATION: MAX ITEM LIMIT
+                    if (item != undefined && oldItemId !== item.typeId) {
+                        let tags = item.getTags();
+                        for (const tag_selected of cached_slot_max_tag_list) {
+                            if (tags.includes(tag_selected)) {
+                                const tagData = curios_database.maxItemSlot[tag_selected];
+                                let total_tag = 0;
+                                tagData.slot.forEach(slot => {
+                                    if (saved_tag_list_per_slot[pid][slot][tag_selected] != undefined) {
+                                        total_tag += saved_tag_list_per_slot[pid][slot][tag_selected];
+                                    }
+                                });
+                                if (total_tag >= tagData.amount) {
+                                    container.setItem(i);
+                                    dimension.spawnItem(item, playerData.location);
+                                    item = undefined;
+                                    isItemValid = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // 3. EVENTS AND PERSISTENCE (Only if changed and valid)
+                    if (isItemValid && item?.typeId !== oldItemId) {
                         
-                        // Run UNEQUIP logic for the item that was just removed
+                        // UNEQUIP OLD
                         const unequipFuncName = player_curios_unequip_events[pid]?.[i];
                         if (unequipFuncName && curiosUnequipRegistry[unequipFuncName]) {
-                            try { curiosUnequipRegistry[unequipFuncName](playerData, i); } catch (e) { console.error(e); }
+                            try { curiosUnequipRegistry[unequipFuncName](playerData, i); } catch (e) { }
                         }
 
-                        // Run EQUIP logic for the item that was just placed in the slot
+                        // EQUIP NEW
                         if (item != undefined) {
                             const tags = item.getTags();
                             const equipTag = tags.find(t => t.startsWith("curios:EventEquip:"));
@@ -594,73 +603,23 @@ export function tickPlayerLoop() {
                             player_curios_death_events[pid][i] = deathTag ? deathTag.split(":")[2] : undefined;
 
                             if (newEquipFunc && curiosEquipRegistry[newEquipFunc]) {
-                                try { curiosEquipRegistry[newEquipFunc](playerData, i); } catch (e) { console.error(e); }
+                                try { curiosEquipRegistry[newEquipFunc](playerData, i); } catch (e) { }
                             }
                         } else {
-                            // If slot is empty, clear the registered events for that slot
                             if (player_curios_equip_events[pid]) player_curios_equip_events[pid][i] = undefined;
                             if (player_curios_unequip_events[pid]) player_curios_unequip_events[pid][i] = undefined;
                             if (player_curios_death_events[pid]) player_curios_death_events[pid][i] = undefined;
                         }
-                    }
 
-                    // --- AUTO-SWAP / WRONG SLOT PROTECTION ---
-                    // If a player puts an item in the wrong slot, automatically move it to a valid one or drop it.
-                    if (item != undefined && !curios_database.register[ACCESORIES_SLOT_INT[i]].includes(item.typeId)) {
-                        let swaped = false;
-                        const categories = item_category[item.typeId];
-                        if (categories != undefined) {
-                            for (const category of categories) {
-                                for (const slot of AccesoriesSlotInt[category]) {
-                                    if (container.getItem(slot) == undefined) {
-                                        container.swapItems(i, slot, container);
-                                        swaped = true;
-                                        item = undefined;
-                                        break;
-                                    }
-                                }
-                                if (swaped) break;
-                            }
-                        }
-                        if (!swaped) {
-                            container.setItem(i);
-                            dimension.spawnItem(item, playerData.location);
-                            item = undefined;
-                        }
-                    }
-
-                    // --- ITEM LIMITER & STRUCTURE SAVING ---
-                    // Checks if the player is exceeding "Max Item" limits for specific tags.
-                    // Also saves the items as structures so they aren't lost when the player dies/logs out.
-                    if (item != undefined && player_curios_list_item_name[pid][i] != item.typeId) {
-                        let tags = item.getTags();
-
-                        for (const tag_selected of cached_slot_max_tag_list) {
-                            if (tags.includes(tag_selected)) {
-                                const tagData = curios_database.maxItemSlot[tag_selected];
-                                let total_tag = 0;
-                                tagData.slot.forEach(slot => {
-                                    if (saved_tag_list_per_slot[pid][slot][tag_selected] != undefined) {
-                                        total_tag += saved_tag_list_per_slot[pid][slot][tag_selected];
-                                    }
-                                });
-                                if (total_tag >= tagData.amount) {
-                                    container.setItem(i);
-                                    dimension.spawnItem(item, playerData.location);
-                                    item = undefined;
-                                    break;
-                                }
-                            }
-                        }
-
+                        // PERSISTENCE
                         structure_manager.delete("mystructure:nvy" + i + pid);
                         if (item != undefined) {
                             let item_entity = dimension.spawnItem(item, { x: location.x + 0.5, y: location.y + 0.5, z: location.z + 0.5 });
                             item_entity.addTag("nvy:item_buffer");
-                            item_entity.addTag("nvy:id " + pid + " " + i);
                             structure_manager.createFromWorld("mystructure:nvy" + i + pid, dimension, location, Vector.add(location, { x: 1, y: 1, z: 1 }), { includeEntities: true, includeBlocks: false });
                             item_entity.remove();
 
+                            let tags = item.getTags();
                             tags.forEach(tag => {
                                 if (tag_list_per_slot[ACCESORIES_SLOT_INT[i]][tag] == undefined) {
                                     tag_list_per_slot[ACCESORIES_SLOT_INT[i]][tag] = 1;
@@ -669,11 +628,10 @@ export function tickPlayerLoop() {
                                 }
                             });
                         }
-                        player_curios_list_item_name[pid][i] = item != undefined ? item.typeId : undefined;
-                    } else if (item == undefined && player_curios_list_item_name[pid][i] != undefined) {
-                        structure_manager.delete("mystructure:nvy" + i + pid);
-                        player_curios_list_item_name[pid][i] = undefined;
+                        player_curios_list_item_name[pid][i] = item?.typeId;
+
                     } else if (item != undefined) {
+                        // MAINTAIN EXISTING TAG DATA
                         const savedSlot = saved_tag_list_per_slot[pid][ACCESORIES_SLOT_INT[i]];
                         if (savedSlot) {
                             Object.keys(savedSlot).forEach(tag => {
@@ -713,4 +671,30 @@ export function tickSyncPlayerTags() {
             }
         });
     }
+}
+
+/**
+ * Checks if a player has a specific item equipped in a specific Curio slot category.
+ * @param {Player} player The player to check
+ * @param {string} slotType The category (e.g., "Bracelet", "Trinket") or Tag (e.g., "curios:is_bracelet")
+ * @param {string} itemID The item identifier (e.g., "nvy:spider_bracelet")
+ * @returns {boolean}
+ */
+export function CheckItemValid(player, slotType, itemID) {
+    const pid = player.id;
+    const data = player_curios_data[pid];
+    if (!data) return false;
+
+    // Convert tag (curios:is_bracelet) to internal name (Bracelet) if necessary
+    let category = TagToRegister[slotType] ?? slotType;
+
+    const indices = AccesoriesSlotInt[category];
+    if (!indices) return false;
+
+    // Check all valid slots for this category (e.g., slots 3 and 5 for Bracelet)
+    for (const index of indices) {
+        if (data[index] === itemID) return true;
+    }
+
+    return false;
 }

@@ -23,12 +23,12 @@ const ZIP_RESPONSE = 0.5; // 0..1 how quickly you reach ZIP_SPEED — lower = sm
 
 // SWING Mode (The "Grapple Push" logic)
 const LOOK_CONTROL = 0.65; //from look direction
-const SWING_FORCE = 0.65;  // The constant push strength while swinging
+const SWING_FORCE = 0.85;  // The constant push strength while swinging
 const ROPE_STIFF = 0.8;    // How hard the rope pulls back when stretched taut
-const SWING_MAX_DEGREE = 135; // Auto-cut if player swings this far past the anchor
+const SWING_MAX_DEGREE = 130; // Auto-cut if player swings this far past the anchor
 const SWING_ANGLE_CAP = 90;   // Degrees: If look angle > this, force is clamped to tangent (circle)
 
-const RELEASE_FLING = 1.5; // fling force when end grappling (sneak)
+const RELEASE_FLING = 1.25; // fling force when end grappling (sneak)
 const SWING_FLING = 1.05;
 
 // Visuals
@@ -62,7 +62,7 @@ function normalize(v: Vector3): Vector3 {
 }
 
 /**
- * Performs a "Spherecast" (bundle of rays) to find a surface.
+ * Performs an 8-point Spherecast (Cardinal + Diagonal) to find a surface.
  */
 function getSpherecastHit(player: Player) {
     const head = player.getHeadLocation();
@@ -73,11 +73,11 @@ function getSpherecastHit(player: Player) {
         includeLiquidBlocks: false 
     };
 
-    // 1. Try standard center ray first
+    // 1. Try standard center ray first (Primary aim)
     const centerHit = player.getBlockFromViewDirection(opts);
     if (centerHit) return centerHit;
 
-    // 2. If center missed, calculate 4 offset rays (Up, Down, Left, Right)
+    // 2. Setup Orthogonal Basis (Right and Up vectors relative to look)
     const rl = Math.hypot(look.z, look.x) || 1;
     const right = { x: -look.z / rl, y: 0, z: look.x / rl };
     const up = {
@@ -86,11 +86,21 @@ function getSpherecastHit(player: Player) {
         z: look.x * 0 - look.y * right.x
     };
 
+    // 3. Define 8-point ring (Cardinal + Diagonals)
+    // 0.707 is approx sin(45 deg), keeping the radius consistent on diagonals
+    const d = 0.707 * WALL_CHECK_DIST;
+    const r = WALL_CHECK_DIST;
+
     const offsets = [
-        { x: right.x * WALL_CHECK_DIST, y: 0, z: right.z * WALL_CHECK_DIST },
-        { x: -right.x * WALL_CHECK_DIST, y: 0, z: -right.z * WALL_CHECK_DIST },
-        { x: up.x * WALL_CHECK_DIST, y: up.y * WALL_CHECK_DIST, z: up.z * WALL_CHECK_DIST },
-        { x: -up.x * WALL_CHECK_DIST, y: -up.y * WALL_CHECK_DIST, z: -up.z * WALL_CHECK_DIST }
+        { x: right.x * r, y: up.y * 0, z: right.z * r }, // Right
+        { x: -right.x * r, y: up.y * 0, z: -right.z * r }, // Left
+        { x: up.x * r, y: up.y * r, z: up.z * r },       // Up
+        { x: -up.x * r, y: -up.y * r, z: -up.z * r },    // Down
+        // Diagonals (X shape)
+        { x: (right.x * d) + (up.x * d), y: (up.y * d), z: (right.z * d) + (up.z * d) },   // Up-Right
+        { x: (-right.x * d) + (up.x * d), y: (up.y * d), z: (-right.z * d) + (up.z * d) }, // Up-Left
+        { x: (right.x * d) - (up.x * d), y: (-up.y * d), z: (right.z * d) - (up.z * d) },  // Down-Right
+        { x: (-right.x * d) - (up.x * d), y: (-up.y * d), z: (-right.z * d) - (up.z * d) } // Down-Left
     ];
 
     for (const offset of offsets) {
@@ -150,7 +160,7 @@ function shootWeb(player: Player): void {
     }
     lastShot.set(player.id, now);
 
-    // Adjusted: Use the Spherecast Hit detection
+    // Adjusted: Use the 9-point Spherecast Hit detection (Center + Octagonal Ring)
     const hit = getSpherecastHit(player);
     const head = player.getHeadLocation();
 
@@ -161,8 +171,6 @@ function shootWeb(player: Player): void {
     }
 
     const b = hit.block.location;
-    // getBlockFromRay returns BlockRaycastHit, getBlockFromViewDirection returns BlockHitInformation
-    // We check for faceLocation, otherwise default to block center
     const f = "faceLocation" in hit ? hit.faceLocation : { x: 0.5, y: 0.5, z: 0.5 };
     const anchor: Vector3 = { x: b.x + f.x, y: b.y + f.y, z: b.z + f.z };
     const ropeLen = len({ x: anchor.x - head.x, y: anchor.y - head.y, z: anchor.z - head.z });
@@ -181,7 +189,7 @@ function release(player: Player, fling: boolean, customDir?: Vector3): void {
         const flingDir = customDir ?? player.getViewDirection();
         player.applyKnockback(
             { x: flingDir.x * RELEASE_FLING, z: flingDir.z * RELEASE_FLING },
-            Math.max(flingDir.y, 0.3) * RELEASE_FLING,
+            Math.min(flingDir.y, 0.3) * RELEASE_FLING,
         );
         player.onScreenDisplay.setActionBar("§7… released");
     } else {
@@ -205,13 +213,13 @@ function swingTick(): void {
         const player = world.getEntity(id) as Player | undefined;
         if (!player || !player.isValid) { webs.delete(id); continue; }
 
-        if (player.isSneaking) { release(player, true); continue; }
+        if (player.isSneaking || player.isJumping) { release(player, true); continue; }
         if (!stillHoldingWeb(player)) { release(player, false); continue; }
 
         const head = player.getHeadLocation();
         const vel = player.getVelocity();
 
-        // --- COLLISION & GROUND DETECTION (Single ray as requested) ---
+        // --- COLLISION & GROUND DETECTION (Single ray for performance) ---
         if (len(vel) > 0.1) {
             const hit = player.dimension.getBlockFromRay(head, normalize(vel), { maxDistance: 1.2 });
             if (hit || player.isOnGround) {

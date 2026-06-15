@@ -14,6 +14,7 @@ import {
     playerList
 } from "./CuriosAPI";
 import "./grapple";
+import "./CuriosEvent";
 
 
 world.afterEvents.worldLoad.subscribe(() => {
