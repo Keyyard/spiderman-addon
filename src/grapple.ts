@@ -3,9 +3,12 @@ import type { Vector3 } from "@minecraft/server";
 
 // ─── Tunables ──────────────────────────────────────────────────────────────
 const WEB_ITEM = "nvy:spider_bracelet"; // right-click this item to shoot a web
-const MAX_WEB_DISTANCE = 50;            // how far a web can reach (blocks)
+const MAX_WEB_DISTANCE = 80;            // how far a web can reach (blocks)
 const RELEASE_DISTANCE = 2.5;           // auto-detach when this close to anchor
-const SHOOT_COOLDOWN = 2;               // ticks between web shots (anti-spam)              
+const SHOOT_COOLDOWN = 1;               // ticks between web shots (anti-spam)              
+
+// Hook Support
+const WALL_CHECK_DIST = 1.5;   // Sphere cast radius for shooting
 
 // Movement Constants
 const KB_SCALE = 1.2;     // applyKnockback units per block/tick (raise/lower if it over/undershoots)
@@ -58,6 +61,47 @@ function normalize(v: Vector3): Vector3 {
     return { x: v.x / l, y: v.y / l, z: v.z / l };
 }
 
+/**
+ * Performs a "Spherecast" (bundle of rays) to find a surface.
+ */
+function getSpherecastHit(player: Player) {
+    const head = player.getHeadLocation();
+    const look = player.getViewDirection();
+    const opts = { 
+        maxDistance: MAX_WEB_DISTANCE, 
+        includePassableBlocks: false, 
+        includeLiquidBlocks: false 
+    };
+
+    // 1. Try standard center ray first
+    const centerHit = player.getBlockFromViewDirection(opts);
+    if (centerHit) return centerHit;
+
+    // 2. If center missed, calculate 4 offset rays (Up, Down, Left, Right)
+    const rl = Math.hypot(look.z, look.x) || 1;
+    const right = { x: -look.z / rl, y: 0, z: look.x / rl };
+    const up = {
+        x: look.y * right.z - look.z * 0, 
+        y: look.z * right.x - look.x * right.z,
+        z: look.x * 0 - look.y * right.x
+    };
+
+    const offsets = [
+        { x: right.x * WALL_CHECK_DIST, y: 0, z: right.z * WALL_CHECK_DIST },
+        { x: -right.x * WALL_CHECK_DIST, y: 0, z: -right.z * WALL_CHECK_DIST },
+        { x: up.x * WALL_CHECK_DIST, y: up.y * WALL_CHECK_DIST, z: up.z * WALL_CHECK_DIST },
+        { x: -up.x * WALL_CHECK_DIST, y: -up.y * WALL_CHECK_DIST, z: -up.z * WALL_CHECK_DIST }
+    ];
+
+    for (const offset of offsets) {
+        const start = { x: head.x + offset.x, y: head.y + offset.y, z: head.z + offset.z };
+        const rayHit = player.dimension.getBlockFromRay(start, look, opts);
+        if (rayHit) return rayHit;
+    }
+
+    return undefined;
+}
+
 function pushDelta(player: Player, dx: number, dy: number, dz: number): void {
     const m = Math.hypot(dx, dy, dz);
     if (m < DEADZONE) return;
@@ -106,11 +150,8 @@ function shootWeb(player: Player): void {
     }
     lastShot.set(player.id, now);
 
-    const hit = player.getBlockFromViewDirection({
-        maxDistance: MAX_WEB_DISTANCE,
-        includePassableBlocks: false,
-        includeLiquidBlocks: false,
-    });
+    // Adjusted: Use the Spherecast Hit detection
+    const hit = getSpherecastHit(player);
     const head = player.getHeadLocation();
 
     if (!hit) {
@@ -120,7 +161,9 @@ function shootWeb(player: Player): void {
     }
 
     const b = hit.block.location;
-    const f = hit.faceLocation;
+    // getBlockFromRay returns BlockRaycastHit, getBlockFromViewDirection returns BlockHitInformation
+    // We check for faceLocation, otherwise default to block center
+    const f = "faceLocation" in hit ? hit.faceLocation : { x: 0.5, y: 0.5, z: 0.5 };
     const anchor: Vector3 = { x: b.x + f.x, y: b.y + f.y, z: b.z + f.z };
     const ropeLen = len({ x: anchor.x - head.x, y: anchor.y - head.y, z: anchor.z - head.z });
     
@@ -147,8 +190,8 @@ function release(player: Player, fling: boolean, customDir?: Vector3): void {
 }
 
 function stillHoldingWeb(player: Player): boolean {
-    const eq = player.getComponent("minecraft:equippable");
-    const main = eq?.getEquipment("Mainhand" as never);
+    const eq = player.getComponent("minecraft:equippable") as any;
+    const main = eq?.getEquipment("Mainhand");
     return main?.typeId === WEB_ITEM;
 }
 
@@ -168,7 +211,7 @@ function swingTick(): void {
         const head = player.getHeadLocation();
         const vel = player.getVelocity();
 
-        // --- NEW: COLLISION & GROUND DETECTION ---
+        // --- COLLISION & GROUND DETECTION (Single ray as requested) ---
         if (len(vel) > 0.1) {
             const hit = player.dimension.getBlockFromRay(head, normalize(vel), { maxDistance: 1.2 });
             if (hit || player.isOnGround) {
