@@ -1,18 +1,17 @@
 import { world, system } from "@minecraft/server";
-import { curiosDeathRegistry, CheckItemValid } from "./CuriosAPI.js";
-import { curiosEquipRegistry, curiosUnequipRegistry } from "./CuriosAPI.js";
+import { curiosDeathRegistry, CheckItemValid, curiosEquipRegistry, curiosUnequipRegistry } from "./CuriosAPI.js";
 
-// --- SPIDER BRACELET LOGIC ---
+// Explicitly use .js extension to fix build errors
+import { CheckLightEvent, LightCondition } from "./LightInteract.js";
+
+// ─── SPIDER BRACELET ───────────────────────────────────────────────────────
+//#region
 const activeSpiders = new Set();
 
 curiosEquipRegistry["spider_logic"] = (player, slotIndex, isInitialLoad) => {
-    
-    // Only send message if the player manually put it in (not on join)
     if (isInitialLoad === false) {
         player.sendMessage("§bSpider Bracelet Equipped!");
     }
-    
-    // Always add to the set so the effect loop works
     activeSpiders.add(player.id);
 };
 
@@ -22,26 +21,19 @@ curiosUnequipRegistry["spider_logic"] = (player, slotIndex) => {
     if (player.isValid) player.removeEffect("jump_boost");
 };
 
-// This uses "system" and "world", so it NEEDS the import at the top
 system.runInterval(() => {
     for (const playerId of activeSpiders) {
         const player = world.getEntity(playerId);
-        if (!player || !player.isValid) {
-            activeSpiders.delete(playerId);
-            continue;
-        }
-        player.addEffect("jump_boost", 100, { 
-            amplifier: 1, 
-            showParticles: true 
-        });
+        if (!player || !player.isValid) { activeSpiders.delete(playerId); continue; }
+        player.addEffect("jump_boost", 100, { amplifier: 1, showParticles: true });
     }
 }, 2);
+//#endregion
 
-
-// --- HOLY VOICE LOGIC ---
+// ─── HOLY VOICE ────────────────────────────────────────────────────────────
+//#region
 const holyTimers = new Map();
 
-// Do the same for Holy Voice if you want to hide its message too
 curiosEquipRegistry["HolyVoice"] = (player, slot, isInitialLoad) => {
     const key = `${player.id}:${slot}`;
     if (holyTimers.has(key)) system.clearRun(holyTimers.get(key));
@@ -54,7 +46,6 @@ curiosEquipRegistry["HolyVoice"] = (player, slot, isInitialLoad) => {
     }, 100);
 
     holyTimers.set(key, id);
-
     if (isInitialLoad === false) {
         player.onScreenDisplay.setActionBar("§7Divine connection established...");
     }
@@ -68,9 +59,48 @@ curiosUnequipRegistry["HolyVoice"] = (player, slot) => {
         player.sendMessage("§c[Holy Voice]§7 Connection lost.");
     }
 };
+//#endregion 
 
-// --- DEATH LOGIC ---
+// ─── INVISICLOAK ──────────────────────────────────────────────────────────
+//#region
+const activeCloaks = new Set();
+const CLOAK_LIGHT_THRESHOLD = 3;
+
+curiosEquipRegistry["invis_logic"] = (player, slotIndex, isInitialLoad) => {
+    if (isInitialLoad === false) player.sendMessage("§8Invisicloak Equipped!");
+    activeCloaks.add(player.id);
+};
+
+curiosUnequipRegistry["invis_logic"] = (player, slotIndex) => {
+    player.sendMessage("§7Invisicloak Removed.");
+    activeCloaks.delete(player.id);
+    if (player.isValid) player.removeEffect("invisibility");
+};
+
+// Independent loop for Cloak logic (Light Sensing)
+system.runInterval(() => {
+    for (const playerId of activeCloaks) {
+        const player = world.getEntity(playerId);
+        if (!player || !player.isValid) { activeCloaks.delete(playerId); continue; }
+
+        // Checks light level at the player's feet
+        const isDimEnough = CheckLightEvent(player, LightCondition.Less, CLOAK_LIGHT_THRESHOLD);
+
+        if (isDimEnough) {
+            player.addEffect("invisibility", 40, { amplifier: 1, showParticles: false });
+            player.onScreenDisplay.setActionBar("§8● Shadow Stealth Active");
+        } else {
+            player.removeEffect("invisibility");
+            player.onScreenDisplay.setActionBar("§e○ Revealed by Light!");
+        }
+    }
+}, 2);
+//#endregion
+
+// ─── DEATH LOGIC TEST ─────────────────────────────────────────────────────
+//#region
 curiosDeathRegistry["MyCustomEffect"] = (player, slot, damageSource) => {
     console.warn(`${player.name} died while wearing a special item in slot ${slot}!`);
     player.dimension.spawnEntity("minecraft:lightning_bolt", player.location);
 };
+//#endregion

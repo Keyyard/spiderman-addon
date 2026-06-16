@@ -2,7 +2,7 @@ import { world, system, Player } from "@minecraft/server";
 import type { Vector3 } from "@minecraft/server";
 
 // ─── Tunables ──────────────────────────────────────────────────────────────
-const WEB_ITEM = "nvy:spider_bracelet"; // right-click this item to shoot a web
+const WEB_ITEM = "curio:spider_bracelet"; // right-click this item to shoot a web
 const MAX_WEB_DISTANCE = 80;            // how far a web can reach (blocks)
 const RELEASE_DISTANCE = 2.5;           // auto-detach when this close to anchor
 const SHOOT_COOLDOWN = 1;               // ticks between web shots (anti-spam)              

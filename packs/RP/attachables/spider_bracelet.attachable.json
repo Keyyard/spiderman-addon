@@ -2,23 +2,29 @@
 	"format_version": "1.10.0",
 	"minecraft:attachable": {
 		"description": {
-			"identifier": "nvy:spider_bracelet",
+			"identifier": "curio:spider_bracelet",
 			"materials": {
 				"default": "entity_alphatest",
 				"enchanted": "entity_alphatest_glint"
 			},
 			"textures": {
-				"default": "textures/items/spider_bracelet",
+				"default": "textures/items/spider_bracelet_texture",
 				"enchanted": "textures/misc/enchanted_actor_glint"
 			},
 			"geometry": {
 				"default": "geometry.spider_bracelet"
 			},
 			"scripts": {
-				"animate": [ "equip" ]
+				"animate": [
+					{ "root": "query.is_first_person" },
+					{ "tps_idle": "!query.is_first_person" }
+				]
 			},
 			"animations": {
-				"equip": "animation.spider_bracelet.equip"
+				"root": "controller.animation.bracelet.main",
+				"fps_equip": "animation.bracelet.FPS.equip",
+				"fps_idle": "animation.braceletFPS.idle",
+				"tps_idle": "animation.braceletTPS.idle"
 			},
 			"render_controllers": [ "controller.render.default" ]
 		}
