@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.bracelet.FPS.equip": {
+		"animation.braceletFPS.equip": {
 			"animation_length": 1.5833,
 			"bones": {
 				"bone": {

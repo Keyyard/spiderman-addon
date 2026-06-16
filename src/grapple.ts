@@ -18,15 +18,20 @@ const DEADZONE = 0.02;    // skip tiny corrections (anti-jitter)
 // ZIP Mode (Looking at anchor)
 // Modes auto-switch by where you look relative to the anchor:
 const ZIP_AIM_DEGREES = 15; // degrees from the anchor → ZIP, else SWING 
-const ZIP_SPEED = 1.9;    // target travel speed (blocks/tick) — higher = faster
+const ZIP_SPEED = 1.7;    // target travel speed (blocks/tick) — higher = faster
 const ZIP_RESPONSE = 0.5; // 0..1 how quickly you reach ZIP_SPEED — lower = smoother/softer
 
 // SWING Mode (The "Grapple Push" logic)
 const LOOK_CONTROL = 0.65; //from look direction
-const SWING_FORCE = 0.85;  // The constant push strength while swinging
+const SWING_FORCE = 0.65;  // The constant push strength while swinging
 const ROPE_STIFF = 0.8;    // How hard the rope pulls back when stretched taut
-const SWING_MAX_DEGREE = 130; // Auto-cut if player swings this far past the anchor
+const SWING_MAX_DEGREE = 120; // Auto-cut if player swings this far past the anchor
+
+
 const SWING_ANGLE_CAP = 90;   // Degrees: If look angle > this, force is clamped to tangent (circle)
+const BACKWARDS_CUTOFF = 150; // Degrees: If look angle > this, stop pushing
+const CUTOFF_FLING = 3;
+
 
 const RELEASE_FLING = 1.25; // fling force when end grappling (sneak)
 const SWING_FLING = 1.05;
@@ -208,6 +213,7 @@ function swingTick(): void {
     const zipThreshold = Math.cos(ZIP_AIM_DEGREES * (Math.PI / 180));
     const swingCutThreshold = Math.cos(SWING_MAX_DEGREE * (Math.PI / 180));
     const capThreshold = Math.cos(SWING_ANGLE_CAP * (Math.PI / 180));
+    const backCutoffThreshold = Math.cos(BACKWARDS_CUTOFF * (Math.PI / 180));
 
     for (const [id, web] of webs) {
         const player = world.getEntity(id) as Player | undefined;
@@ -241,7 +247,19 @@ function swingTick(): void {
 
         let label: string;
 
-        if (aim > zipThreshold) 
+        if (aim < backCutoffThreshold) 
+        {
+            //push 
+            const flingAmplify = player.getViewDirection()
+
+            flingAmplify.x *= CUTOFF_FLING
+            flingAmplify.y *= CUTOFF_FLING
+            flingAmplify.z *= CUTOFF_FLING
+
+            release(player, true, flingAmplify)
+            return;
+        }
+        else if (aim > zipThreshold) 
         {
             // --- ZIP MODE AUTO-CUT ---
             if (dist < RELEASE_DISTANCE) {

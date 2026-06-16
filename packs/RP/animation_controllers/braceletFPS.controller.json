@@ -1,0 +1,26 @@
+{
+	"format_version": "1.10.0",
+	"animation_controllers": {
+		"controller.animation.bracelet.main": {
+			"initial_state": "equipping",
+			"states": {
+				"equipping": {
+					"animations": [ "fps_equip" ],
+					"transitions": [
+						{
+							"idle": "q.all_animations_finished && (t.current_time = query.time_stamp; t.result = t.current_time - v.last_time <= 1? 0 : 1;v.last_time = t.current_time;return t.result);"
+						}
+					]
+				},
+				"idle": {
+					"animations": [ "fps_idle" ],
+					"transitions": [
+						{ 
+							"equipping": "t.current_time = query.time_stamp; t.result = t.current_time - v.last_time <= 1? 0 : 1;v.last_time = t.current_time;return t.result;"
+						}
+					]
+				}
+			}
+		}
+	}
+}

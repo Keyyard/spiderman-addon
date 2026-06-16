@@ -15,14 +15,17 @@
 				"default": "geometry.spider_bracelet"
 			},
 			"scripts": {
+				"initialize": [
+					"v.last_time = query.time_stamp;"
+				],
 				"animate": [
-					{ "root": "query.is_first_person" },
-					{ "tps_idle": "!query.is_first_person" }
+					{ "root": "context.is_first_person == 1.0" },
+					{ "tps_idle": "!context.is_first_person == 1.0" }
 				]
 			},
 			"animations": {
 				"root": "controller.animation.bracelet.main",
-				"fps_equip": "animation.bracelet.FPS.equip",
+				"fps_equip": "animation.braceletFPS.equip",
 				"fps_idle": "animation.braceletFPS.idle",
 				"tps_idle": "animation.braceletTPS.idle"
 			},
