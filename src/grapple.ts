@@ -18,19 +18,19 @@ const DEADZONE = 0.02;    // skip tiny corrections (anti-jitter)
 // ZIP Mode (Looking at anchor)
 // Modes auto-switch by where you look relative to the anchor:
 const ZIP_AIM_DEGREES = 15; // degrees from the anchor → ZIP, else SWING 
-const ZIP_SPEED = 1.7;    // target travel speed (blocks/tick) — higher = faster
+const ZIP_SPEED = 1.9;    // target travel speed (blocks/tick) — higher = faster
 const ZIP_RESPONSE = 0.5; // 0..1 how quickly you reach ZIP_SPEED — lower = smoother/softer
 
 // SWING Mode (The "Grapple Push" logic)
 const LOOK_CONTROL = 0.65; //from look direction
-const SWING_FORCE = 0.65;  // The constant push strength while swinging
+const SWING_FORCE = 0.7;  // The constant push strength while swinging
 const ROPE_STIFF = 0.8;    // How hard the rope pulls back when stretched taut
 const SWING_MAX_DEGREE = 120; // Auto-cut if player swings this far past the anchor
 
 
 const SWING_ANGLE_CAP = 90;   // Degrees: If look angle > this, force is clamped to tangent (circle)
 const BACKWARDS_CUTOFF = 150; // Degrees: If look angle > this, stop pushing
-const CUTOFF_FLING = 3;
+const CUTOFF_FLING = 2.25;
 
 
 const RELEASE_FLING = 1.25; // fling force when end grappling (sneak)
