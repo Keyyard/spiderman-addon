@@ -1,3 +1,5 @@
+import { CuriosEventEvolve } from "../Ults/CuriosEventEvolve.js";
+
 export class AncientBadgeLogic extends CuriosEventEvolve {
     constructor() 
     { 

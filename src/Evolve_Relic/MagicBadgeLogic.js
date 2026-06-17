@@ -1,3 +1,5 @@
+import { CuriosEventEvolve } from "../Ults/CuriosEventEvolve.js";
+
 export class MagicBadgeLogic extends CuriosEventEvolve {
     constructor() { super("curio:evolve_badget_2", "magic_logic", "curio:evolve_badget_3"); }
 

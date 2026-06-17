@@ -1,4 +1,4 @@
-import { CuriosEventBase } from "./CuriosEventBase.js";
+import { CuriosEventBase } from "../Curios_Base/CuriosEventBase.js";
 import { ItemStack } from "@minecraft/server";
 
 export class CuriosEventEvolve extends CuriosEventBase {

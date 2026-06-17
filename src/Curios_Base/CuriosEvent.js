@@ -1,6 +1,6 @@
 import { world, system, EquipmentSlot } from "@minecraft/server";
 import { curiosDeathRegistry, curiosEquipRegistry, curiosUnequipRegistry } from "./CuriosAPI.js";
-import { Relics } from "./RelicDatabase.js"; // Note: Adjust name if yours is CuriosDatabase.js
+import { Relics } from "./CuriosDatabase.js"; // Note: Adjust name if yours is CuriosDatabase.js
 
 const activeRegistry = new Map();
 

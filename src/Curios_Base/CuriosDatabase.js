@@ -6,11 +6,11 @@ import { HolyVoiceLogic } from "../Passive_Relic/HolyVoiceLogic.js";
 import { SpiderBraceletLogic } from "../Active_Relic/SpiderBraceletLogic.js";
 
 // --- EVOLVE RELICS ---
-import { AncientBadgeLogic } from "../Passive_Relic/AncientBadgeLogic.js";
-import { MagicBadgeLogic } from "../Passive_Relic/MagicBadgeLogic.js";
-import { HeroBadgeLogic } from "../Passive_Relic/HeroBadgeLogic.js";
-import { FallenBeliefLogic } from "../Passive_Relic/FallenBeliefLogic.js";
-import { MadeInHeavenLogic } from "../Passive_Relic/MadeInHeavenLogic.js";
+import { AncientBadgeLogic } from "../Evolve_Relic/AncientBadgeLogic.js";
+import { MagicBadgeLogic } from "../Evolve_Relic/MagicBadgeLogic.js";
+import { HeroBadgeLogic } from "../Evolve_Relic/HeroBadgeLogic.js";
+import { FallenBeliefLogic } from "../Evolve_Relic/FallenBeliefLogic.js";
+import { MadeInHeavenLogic } from "../Evolve_Relic/MadeInHeavenLogic.js";
 
 
 
