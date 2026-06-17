@@ -17,15 +17,15 @@
     },
 
     "evolve_badget_2": {
-      "textures": "textures/items/evolve_badget"
+      "textures": "textures/items/evolve_badget_2"
     },
 
     "evolve_badget_3": {
-      "textures": "textures/items/evolve_badget"
+      "textures": "textures/items/evolve_badget_3"
     },
 
     "evolve_badget_4": {
-      "textures": "textures/items/evolve_badget"
+      "textures": "textures/items/evolve_badget_4"
     },
 
     "evolve_badget_5": {
