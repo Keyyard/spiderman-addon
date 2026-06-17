@@ -1,7 +1,7 @@
 //modified from NoveltyAPI: https://www.curseforge.com/minecraft-bedrock/addons/novelty
 
 import { world, system, EquipmentSlot, ItemStack, ItemTypes } from "@minecraft/server";
-import { Vector } from "./Vector3";
+import { Vector } from "../Vector3";
 
 export const ACCESORIES_SLOT_INT = [
     "Face", "Hat", "Necklace", "Bracelet", "Back", "Bracelet", "Hand", "Belt",
