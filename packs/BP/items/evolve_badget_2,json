@@ -1,0 +1,26 @@
+{
+	"format_version": "1.21.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "curio:evolve_badget_2",
+			"menu_category": {
+				"category": "equipment"
+			}
+		},
+		"components": {
+			"minecraft:icon": "evolve_badget_2",
+			"minecraft:display_name": {
+				"value": "Magic Badge"
+			},
+			"minecraft:max_stack_size": 1,
+			"minecraft:hand_equipped": true,
+			"minecraft:tags": {
+				"tags": [ 
+					"curios:is_trinket",
+					"curios:EventEquip:magic_logic",
+					"curios:EventUnequip:magic_logic"
+				]
+			}
+		}
+	}
+}

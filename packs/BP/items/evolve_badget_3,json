@@ -1,0 +1,27 @@
+{
+	"format_version": "1.21.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "curio:evolve_badget_3",
+			"menu_category": {
+				"category": "equipment"
+			}
+		},
+		"components": {
+			"minecraft:icon": "evolve_badget_3",
+			"minecraft:display_name": {
+				"value": "Hero Badge"
+			},
+			"minecraft:max_stack_size": 1,
+			"minecraft:hand_equipped": true,
+			"minecraft:tags": {
+				"tags": [ 
+					"curios:is_trinket",
+					"curios:EventEquip:hero_logic",
+					"curios:EventUnequip:hero_logic",
+					"curios:EventDeath:hero_logic"
+				]
+			}
+		}
+	}
+}
