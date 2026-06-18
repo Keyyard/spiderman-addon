@@ -42,6 +42,7 @@ export const TagToRegister = {
     "curios:is_foot": "Foot",
     "curios:is_spellbook": "Spellbook",
     "curios:is_charm": "Charm",
+    "curios:is_special": "Special",
 
     "curios:EventEquip": "EventEquip",
     "curios:EventUnequip": "EventUnequip",
