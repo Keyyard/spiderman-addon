@@ -502,7 +502,7 @@ export function tickPlayerLoop() {
             const curios_id = playerData.getDynamicProperty("curios-id");
             if (curios_id == undefined) {
                 const entity = dimension.spawnEntity("nvy:curios_inventory", playerData.getHeadLocation());
-                entity.nameTag = "6d3ce9af-bb97-4ade-92b7-5b964d20f16c";
+                entity.nameTag = "Curios Inventory";
                 entity.getComponent("minecraft:tameable").tame(playerData);
                 entity.setDynamicProperty("curios-source-id", pid);
                 playerData.setDynamicProperty("curios-id", entity.id);

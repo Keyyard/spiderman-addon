@@ -36,7 +36,8 @@
 			"minecraft:fire_immune": {
 			},
 			"minecraft:nameable": {
-				"always_show": false
+				"always_show": false,
+				"allow_name_tag_renaming": false
 			},
 			"minecraft:type_family": {
 				"family": [ "inanimate" ]

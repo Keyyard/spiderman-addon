@@ -4,7 +4,7 @@ import { system } from "@minecraft/server";
 export class FallenBeliefLogic extends CuriosEventEvolve {
     constructor() {
         // ID: Badge 4, Key: fallen_logic, Evolves to: Badge 5 (Made in Heaven)
-        super("curio:evolve_badget_4", "fallen_logic", "curio:evolve_badget_5");
+        super("curio:evolve_badget_4", "fallen_logic", "curio:made_in_heaven");
     }
 
     /**

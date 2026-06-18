@@ -23,10 +23,11 @@ export class CuriosEventEvolve extends CuriosEventBase {
     /**
      * Helper to perform the evolution
      */
-    evolve(player, offhandSlot) {
+    evolve(player, offhandSlot, message = "") {
         if (!this.evolveToId) return;
         offhandSlot.setItem(new ItemStack(this.evolveToId));
-        player.sendMessage(`§aYour §e${this.identifier}§a has evolved!`);
+        if(!message.empty) player.sendMessage(message);
+        
         player.dimension.playSound("random.levelup", player.location);
     }
 }

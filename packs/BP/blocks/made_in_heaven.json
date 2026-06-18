@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.80",
+  "minecraft:block": {
+    "description": {
+      "identifier": "curio:made_in_heaven",
+      "menu_category": {
+        "category": "none"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "geometry.block_mesh",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "made_in_heaven",
+          "face_dimming": false,
+          "render_method": "alpha_test"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "resource_pack_name": "spider man addon",
+  "texture_data": {
+    "made_in_heaven": {
+      "textures": "textures/items/made_in_heaven"
+    }
+  }
+}
