@@ -1,4 +1,4 @@
-import { world, system } from "@minecraft/server";
+import { world, system, MolangVariableMap } from "@minecraft/server";
 import { CuriosEventBase } from "../Curios_Base/CuriosEventBase.js";
 
 // ─── Tunables (PRESERVED FROM GRAPPLE.TS) ──────────────────────────────────
@@ -36,8 +36,10 @@ const SWING_FLING = 1.05;
 
 // Visuals
 const WEB_PARTICLE = "nvy:web_strand";
-const STRAND_SPACING = 0.5; // blocks between strand particles
-const STRAND_MAX = 64;      // cap particles per strand
+const webVars = new MolangVariableMap();
+
+//const STRAND_SPACING = 0.5; // blocks between strand particles
+//const STRAND_MAX = 64;      // cap particles per strand
 // ───────────────────────────────────────────────────────────────────────────
 
 export class SpiderBraceletLogic extends CuriosEventBase {
@@ -286,15 +288,16 @@ export class SpiderBraceletLogic extends CuriosEventBase {
         const from = this.wristPoint(player);
         const d = { x: anchor.x - from.x, y: anchor.y - from.y, z: anchor.z - from.z };
         const dist = this.len(d);
-        const steps = Math.min(STRAND_MAX, Math.max(2, Math.ceil(dist / STRAND_SPACING)));
-        for (let i = 1; i <= steps; i++) {
-            const t = i / steps;
-            try {
-                player.dimension.spawnParticle(WEB_PARTICLE, {
-                    x: from.x + d.x * t, y: from.y + d.y * t, z: from.z + d.z * t,
-                });
-            } catch { break; }
-        }
+        if (dist < 0.01) return;
+
+        // One stretched billboard spanning wrist→anchor (lookat_direction beam),
+        // instead of spamming a dotted line of particles along the rope.
+        const mid = { x: from.x + d.x * 0.5, y: from.y + d.y * 0.5, z: from.z + d.z * 0.5 };
+        webVars.setVector3("variable.direction", normalize(d));
+        webVars.setFloat("variable.length", dist / 2); // half-extent: billboard grows from the midpoint
+        try {
+            player.dimension.spawnParticle(WEB_PARTICLE, mid, webVars);
+        } catch { /* particle not yet registered */ }
     }
 
     shootWeb(player) 
@@ -302,7 +305,7 @@ export class SpiderBraceletLogic extends CuriosEventBase {
         const now = system.currentTick;
         const last = this.lastShot.get(player.id) ?? -1000;
         if (now - last < SHOOT_COOLDOWN) {
-            player.onScreenDisplay.setActionBar(`§8✗ §7Wait ${SHOOT_COOLDOWN - (now - last)} more tick(s)`);
+            player.onScreenDisplay.setActionBar(`§7Wait ${SHOOT_COOLDOWN - (now - last)} more tick(s)`);
             return;
         }
         this.lastShot.set(player.id, now);
@@ -311,7 +314,7 @@ export class SpiderBraceletLogic extends CuriosEventBase {
         const head = player.getHeadLocation();
 
         if (!hit) {
-            player.onScreenDisplay.setActionBar("§8✗ §7No Surface Found");
+            player.onScreenDisplay.setActionBar("§7No Surface Found");
             player.dimension.playSound("random.bow", head, { volume: 0.3, pitch: 1.8 });
             return;
         }
@@ -335,7 +338,7 @@ export class SpiderBraceletLogic extends CuriosEventBase {
                 { x: flingDir.x * RELEASE_FLING, z: flingDir.z * RELEASE_FLING },
                 Math.min(flingDir.y, 0.3) * RELEASE_FLING,
             );
-            player.onScreenDisplay.setActionBar("§7… released");
+            player.onScreenDisplay.setActionBar("§7 released");
         } else {
             player.onScreenDisplay.setActionBar("");
         }
