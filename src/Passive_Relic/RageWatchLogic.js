@@ -1,6 +1,6 @@
 import { world } from "@minecraft/server";
 import { CuriosEventBase } from "../Curios_Base/CuriosEventBase.js";
-import { CheckItemValid } from "./CuriosAPI.js"; // Helper to check if item is worn
+import { CheckItemValid } from "../Curios_Base/CuriosAPI.js"; // Helper to check if item is worn
 
 export class RageWatchLogic extends CuriosEventBase {
     constructor() {
