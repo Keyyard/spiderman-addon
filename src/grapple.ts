@@ -38,7 +38,7 @@ const SWING_FLING = 1.05;
 
 // Visuals
 const WEB_PARTICLE = "nvy:web_strand";
-const webVars = new MolangVariableMap();
+let webVars: MolangVariableMap | undefined; // lazy: can't construct during early execution
 // ───────────────────────────────────────────────────────────────────────────
 
 interface Web {
@@ -147,6 +147,7 @@ function drawWeb(player: Player, anchor: Vector3): void {
     // One stretched billboard spanning wrist→anchor (lookat_direction beam),
     // instead of spamming a dotted line of particles along the rope.
     const mid = { x: from.x + d.x * 0.5, y: from.y + d.y * 0.5, z: from.z + d.z * 0.5 };
+    if (!webVars) webVars = new MolangVariableMap();
     webVars.setVector3("variable.direction", normalize(d));
     webVars.setFloat("variable.length", dist / 2); // half-extent: billboard grows from the midpoint
     try {

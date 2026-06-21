@@ -88,10 +88,10 @@ system.runInterval(() => {
 
         if (isDimEnough) {
             player.addEffect("invisibility", 40, { amplifier: 1, showParticles: false });
-            player.onScreenDisplay.setActionBar("§8● Shadow Stealth Active");
+            player.onScreenDisplay.setActionBar("§8Shadow Stealth Active");
         } else {
             player.removeEffect("invisibility");
-            player.onScreenDisplay.setActionBar("§e○ Revealed by Light!");
+            player.onScreenDisplay.setActionBar("§eRevealed by Light!");
         }
     }
 }, 2);
