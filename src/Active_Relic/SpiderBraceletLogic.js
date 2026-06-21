@@ -36,10 +36,11 @@ const SWING_FLING = 1.05;
 
 // Visuals
 const WEB_PARTICLE = "nvy:web_strand";
-const webVars = new MolangVariableMap();
+//const webVars = new MolangVariableMap();
+let webVars;
 
-//const STRAND_SPACING = 0.5; // blocks between strand particles
-//const STRAND_MAX = 64;      // cap particles per strand
+const STRAND_SPACING = 0.5; // blocks between strand particles
+const STRAND_MAX = 64;      // cap particles per strand
 // ───────────────────────────────────────────────────────────────────────────
 
 export class SpiderBraceletLogic extends CuriosEventBase {
@@ -286,18 +287,39 @@ export class SpiderBraceletLogic extends CuriosEventBase {
 
     drawWeb(player, anchor) {
         const from = this.wristPoint(player);
-        const d = { x: anchor.x - from.x, y: anchor.y - from.y, z: anchor.z - from.z };
+        const d = { 
+            x: anchor.x - from.x, 
+            y: anchor.y - from.y, 
+            z: anchor.z - from.z 
+        };
         const dist = this.len(d);
+
+        // Guard against zero-length webs
         if (dist < 0.01) return;
 
-        // One stretched billboard spanning wrist→anchor (lookat_direction beam),
-        // instead of spamming a dotted line of particles along the rope.
-        const mid = { x: from.x + d.x * 0.5, y: from.y + d.y * 0.5, z: from.z + d.z * 0.5 };
-        webVars.setVector3("variable.direction", normalize(d));
-        webVars.setFloat("variable.length", dist / 2); // half-extent: billboard grows from the midpoint
+        // Lazy Initialization: Create the map only when the first web is drawn.
+        // This avoids the "early execution" error in Bedrock.
+        if (!webVars) {
+            webVars = new MolangVariableMap();
+        }
+
+        // Calculate the midpoint of the web
+        const mid = { 
+            x: from.x + d.x * 0.5, 
+            y: from.y + d.y * 0.5, 
+            z: from.z + d.z * 0.5 
+        };
+
+        // Set Molang variables for the stretched particle
+        // Note: Use 'this.normalize' because it is a class method
+        webVars.setVector3("variable.direction", this.normalize(d));
+        webVars.setFloat("variable.length", dist / 2); // Billboard grows from midpoint
+
         try {
             player.dimension.spawnParticle(WEB_PARTICLE, mid, webVars);
-        } catch { /* particle not yet registered */ }
+        } catch (e) {
+            // Handle case where particle isn't registered in the RP yet
+        }
     }
 
     shootWeb(player) 

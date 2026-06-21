@@ -109,11 +109,14 @@ export function scanItemTags() {
         item.getTags().forEach(tag => {
             if (TagToRegister[tag] != undefined) {
                 let key = TagToRegister[tag];
-                curios_database.register[key].push(id.id);
-                if (item_category[id.id] == undefined) {
-                    item_category[id.id] = [key];
-                } else {
-                    item_category[id.id].push(key);
+                if (curios_database.register[key] != undefined) {
+                    curios_database.register[key].push(id.id);
+                    
+                    if (item_category[id.id] == undefined) {
+                        item_category[id.id] = [key];
+                    } else if (!item_category[id.id].includes(key)) {
+                        item_category[id.id].push(key);
+                    }
                 }
             }
         });

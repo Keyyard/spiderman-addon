@@ -11,7 +11,8 @@ export const AccessoriesSlot = {
     Neckless: "Neckless",
     Foot: "Foot",
     Spellbook: "Spellbook",
-    Charm: "Charm"
+    Charm: "Charm",
+    Special: "Special"
 }
 
 const AccessoriesList = Object.keys(AccessoriesSlot);
