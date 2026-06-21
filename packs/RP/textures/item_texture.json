@@ -11,6 +11,27 @@
     "invisicloak": {
       "textures": "textures/items/invisicloak"
     },
+
+    "evolve_badget_1": {
+      "textures": "textures/items/evolve_badget"
+    },
+
+    "evolve_badget_2": {
+      "textures": "textures/items/evolve_badget_2"
+    },
+
+    "evolve_badget_3": {
+      "textures": "textures/items/evolve_badget_3"
+    },
+
+    "evolve_badget_4": {
+      "textures": "textures/items/evolve_badget_4"
+    },
+
+    "evolve_badget_5": {
+      "textures": "textures/items/silk_amount"
+    },
+    
     "curios": {
       "textures": "textures/items/curios"
     }

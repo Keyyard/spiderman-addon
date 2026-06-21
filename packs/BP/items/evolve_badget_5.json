@@ -1,0 +1,35 @@
+{
+  "format_version": "1.21.80",
+  "minecraft:item": {
+    "description": {
+      "identifier": "curio:made_in_heaven",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:block_placer": {
+        "block": "curio:made_in_heaven",
+        "replace_block_item": true,
+        "use_on": [
+          "minecraft:air"
+        ]
+      },
+      "minecraft:display_name": {
+        "value": "Made in Heaven"
+      },
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:equippable": {
+        "slot": "slot.weapon.offhand"
+      },
+      "minecraft:tags": {
+        "tags": [
+          "curios:is_trinket",
+          "curios:EventEquip:mih_logic",
+          "curios:EventUnequip:mih_logic"
+        ]
+      }
+    }
+  }
+}

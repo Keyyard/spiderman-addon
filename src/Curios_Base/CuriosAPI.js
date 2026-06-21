@@ -1,7 +1,7 @@
 //modified from NoveltyAPI: https://www.curseforge.com/minecraft-bedrock/addons/novelty
 
 import { world, system, EquipmentSlot, ItemStack, ItemTypes } from "@minecraft/server";
-import { Vector } from "./Vector3";
+import { Vector } from "../Vector3";
 
 export const ACCESORIES_SLOT_INT = [
     "Face", "Hat", "Necklace", "Bracelet", "Back", "Bracelet", "Hand", "Belt",
@@ -42,6 +42,7 @@ export const TagToRegister = {
     "curios:is_foot": "Foot",
     "curios:is_spellbook": "Spellbook",
     "curios:is_charm": "Charm",
+    "curios:is_special": "Special",
 
     "curios:EventEquip": "EventEquip",
     "curios:EventUnequip": "EventUnequip",
@@ -502,7 +503,7 @@ export function tickPlayerLoop() {
             const curios_id = playerData.getDynamicProperty("curios-id");
             if (curios_id == undefined) {
                 const entity = dimension.spawnEntity("nvy:curios_inventory", playerData.getHeadLocation());
-                entity.nameTag = "6d3ce9af-bb97-4ade-92b7-5b964d20f16c";
+                entity.nameTag = "Curios Inventory";
                 entity.getComponent("minecraft:tameable").tame(playerData);
                 entity.setDynamicProperty("curios-source-id", pid);
                 playerData.setDynamicProperty("curios-id", entity.id);

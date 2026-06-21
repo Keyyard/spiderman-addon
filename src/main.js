@@ -12,9 +12,8 @@ import {
     handlePlayerLeave,
     player_curios_in_mainhand,
     playerList
-} from "./CuriosAPI";
-import "./grapple";
-import "./CuriosEvent";
+} from "./Curios_Base/CuriosAPI";
+import "./Curios_Base/CuriosEvent";
 
 
 world.afterEvents.worldLoad.subscribe(() => {
