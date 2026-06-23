@@ -1,0 +1,31 @@
+{
+  "format_version": "1.10.0",
+  "animation_controllers": {
+    "controller.animation.mimic.root": {
+      "initial_state": "default",
+      "states": {
+        "default": {
+          "animations": [
+            "stay"
+          ],
+          "transitions": [
+            {
+              "mimic_attack": "variable.has_target && q.ground_speed>0.0 && variable.attack_time >= 0"
+            }
+          ]
+        },
+        "mimic_attack": {
+          "blend_transition": 0.2,
+          "animations": [
+            "attack"
+          ],
+          "transitions": [
+            {
+              "default": "!variable.has_target || q.ground_speed <= 0.0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
