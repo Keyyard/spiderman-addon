@@ -44,6 +44,9 @@
     "rage_watch": {
       "textures": "textures/items/rage_watch"
     },
+    "reverse_watch": {
+      "textures": "textures/items/reverse_watch"
+    },
     "killer_queen": {
       "textures": "textures/items/killer_queen"
     },
