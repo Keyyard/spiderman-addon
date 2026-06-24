@@ -27,33 +27,33 @@ export function GetLoreById(itemTypeId) {
 // --- INITIALIZATION CALLS ---
 
 // Copper Rocket Wand
-RegisterLore("curio:copper_rocket_wand", "§7§eRight-click§7 to perform a §eDash/Boosts Elytra§7.\\n§a⚙ Auto-repairs§7 with §6Copper Nuggets§7 each 2 seconds");
+RegisterLore("curio:copper_rocket_wand", "§7§e§lRight-click§r §7to perform a dash or boost §b§lElytra§r§7.\\n§a+ §lAuto-repairs§r §7using §6§lCopper Nuggets§r §7every §e§l2 seconds§r");
 
 // Enderbelt
-RegisterLore("curio:enderbelt", "§7A forgotten belt that contain §l§fenderman secret technique§7.\\n§eSneak§7 while use §6ender pearl§7 will §ainstantly teleport§7 player 25 blocks");
+RegisterLore("curio:enderbelt", "§7A forgotten belt containing enderman techniques.\\n§a+ §e§lSneak§r §7while using §d§lender pearls§r §7to §linstantly teleport§r");
 
-// Evolve Badgets
-RegisterLore("curio:evolve_badget_1", "§7I wonder what is §l§fhidden§7 behind this...");
-RegisterLore("curio:evolve_badget_2", "§7A relic that contain §l§fRelic Power§7, I wonder what Relics are for.");
-RegisterLore("curio:evolve_badget_3", "§7A new hero ascended, strike down the §l§fworst Catastrophe§7.\\n§a+ Immune to fall damage");
-RegisterLore("curio:evolve_badget_4", "§7Through §l§fglory and ashes§7, A Divine path shall be revealed...\\n§c§lA hero fallen, cursed by evil");
+// Evolve Badgets (Hero Badges)
+RegisterLore("curio:evolve_badget_1", "§7I wonder what is §l§fhidden§r §7behind this...");
+RegisterLore("curio:evolve_badget_2", "§7A relic containing §l§fRelic Power§r§7. I wonder what the §l§fPower§r §7for.");
+RegisterLore("curio:evolve_badget_3", "§7A new §l§fhero§r §7ascended to strike down the worst §c§lcatastrophe§r§7.\\n§a+ §lImmune to fall damage§r");
+RegisterLore("curio:evolve_badget_4", "§7Through glory and ashes, a divine path shall be revealed...\\n§c+ §lA hero fallen§r§c, cursed by §c§lwithered§r");
 
 // Made in Heaven
-RegisterLore("curio:made_in_heaven", "§7Peace for §l§fhumanity§7.");
+RegisterLore("curio:made_in_heaven", "§l§fPeace for humanity.§r");
 
 // Invisicloak
-RegisterLore("curio:invisicloak", "§7Batman prototype item.\\n§aInvisible§7 while in the dark");
+RegisterLore("curio:invisicloak", "§7Batman prototype item.\\n§a+ §lInvisible§r §7while §a§lin the dark§r");
 
 // Killer Queen Items
-RegisterLore("curio:killer_queen", "§7To keep an §l§fordinary life§7, we need to §l§fdelete the problem§7 in silent.\\n§aEvery projectile§7 now turns to a §asilent bomb§7, §adestroying items or blocks");
-RegisterLore("curio:killer_queen_btd", "§7Return by §l§fDeath§7, back to ordinary life.\\n§eSneak + Right Click§7 to §aplace time anchor");
+RegisterLore("curio:killer_queen", "§7To keep an §l§fordinary life§r§7, we must §l§fdelete the problem§r §7in silence.\\n§a+ §b§lProjectiles§r §7turn to §b§lsilent bombs§r§7 that §l§fwon't§r§7 destroy items or blocks");
+RegisterLore("curio:killer_queen_btd", "§c§lReturn by death§r §7and wake up at a comfy home.\\n§a+ §e§lSneak + Right Click§r §7to §lplace a §l§ftime anchor§r");
 
 // Watches
-RegisterLore("curio:ragewatch", "§7We don't have that much time, §l§fdont block my way§7.\\n§7When hit, §again Strength effect§7 for 5 secs (Stackable)");
-RegisterLore("curio:reverse_watch", "§7A watch that contains §l§fspace and time§7? Too OP.\\n§7Keep on hotbar, §eRight Click§7 to §aReverse the time");
+RegisterLore("curio:ragewatch", "§7We don't have that much time, don't block my way.\\n§a+ §lGain Strength§r §7for §e§l5s§r §7when hit (stackable)");
+RegisterLore("curio:reverse_watch", "§7A watch that can §l§ftwist§r §6§lSpace§r §7and §5§lTime§r§7?.\\n§a+ §e§lRight Click§r §7to §lReverse the time§r §e§l(max 5s)§r");
 
 // Spider Bracelet
-RegisterLore("curio:spider_bracelet", "§7§l§fSpooder man§7.\\n§eRight click§7 to §aswing§7.\\n§7Hold in curios inventory to §aget Spider Power !!!!");
+RegisterLore("curio:spider_bracelet", "§7Spooder man.\\n§a+ §e§lRight click + Look Direction§r §7to §lswing§r.\\n§a+ §lGet Spider Power§r §7while in §6§lCurios inventory§r §7!!!!");
 
 // Torch Placer
-RegisterLore("curio:torchplacer", "§7Scared of the dark? Don't worry, Torch Placer 3000 is here.\\n§a⚙ Fuel§7 with §6torches§7 on hotbar and §abye bye darkness");
+RegisterLore("curio:torchplacer", "§7Scared of the dark? The §e§lTorch Placer 3000§r §7is here.\\n§a+ §7Fuel with §6§ltorches§r §7on §l§fhotbar§r §7to §lbye bye §5§ldarkness§r");
