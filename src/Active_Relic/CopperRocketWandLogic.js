@@ -1,4 +1,4 @@
-import { system, world, EquipmentSlot } from "@minecraft/server";
+import { system, world, MolangVariableMap, EquipmentSlot } from "@minecraft/server";
 import { CuriosEventBase } from "../Curios_Base/CuriosEventBase.js";
 
 export class CopperRocketWandLogic extends CuriosEventBase {
