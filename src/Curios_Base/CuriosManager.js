@@ -28,7 +28,8 @@ const AccessoriesSlotInt = {
     Neckless: [2],
     Foot: [9, 10],
     Spellbook: [11],
-    Charm: [22, 23]
+    Charm: [22, 23],
+    Special: []
 }
 
 let SendData = {
@@ -43,7 +44,8 @@ let SendData = {
         Neckless: [],
         Foot: [],
         Spellbook: [],
-        Charm: []
+        Charm: [],
+        Special: []
     }
 };
 

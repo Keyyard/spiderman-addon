@@ -4,9 +4,11 @@ import { HolyVoiceLogic } from "../Passive_Relic/HolyVoiceLogic.js";
 import { RageWatchLogic } from "../Passive_Relic/RageWatchLogic.js";
 import { TorchPlacerLogic } from "../Passive_Relic/TorchPlacerLogic.js";
 import { EnderBeltLogic } from "../Passive_Relic/EnderBeltLogic.js";
+import { KillerQueen } from "../Passive_Relic/KillerQueenLogic.js";
 
 // --- ACTIVE RELICS ---
 import { SpiderBraceletLogic } from "../Active_Relic/SpiderBraceletLogic.js";
+import { BiteTheDustLogic } from "../Active_Relic/BiteTheDustLogic.js";
 
 // --- EVOLVE RELICS ---
 import { AncientBadgeLogic } from "../Evolve_Relic/AncientBadgeLogic.js";
@@ -27,8 +29,10 @@ export const Relics = [
     new RageWatchLogic(),
     new TorchPlacerLogic(),
     new EnderBeltLogic(),
+    new KillerQueen(),
 
     new SpiderBraceletLogic(),
+    new BiteTheDustLogic(),
 
     new AncientBadgeLogic(),
     new MagicBadgeLogic(),

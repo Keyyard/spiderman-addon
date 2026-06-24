@@ -10,7 +10,7 @@ export const ACCESORIES_SLOT_INT = [
 ];
 
 export const ALL_SLOT_LIST = [
-    "Face", "Hat", "Necklace", "Bracelet", "Back", "Hand", "Belt", "Foot", "Spellbook", "Trinket", "Charm"
+    "Face", "Hat", "Necklace", "Bracelet", "Back", "Hand", "Belt", "Foot", "Spellbook", "Trinket", "Charm", "Special"
 ];
 
 export const ACCESSORIES_LENGTH = 24;
@@ -26,7 +26,7 @@ export const AccesoriesSlotInt = {
     Necklace: [2],
     Foot: [9, 10],
     Spellbook: [11],
-    Charm: [22, 23]
+    Charm: [22, 23],
 };
 
 export const TagToRegister = {
@@ -74,7 +74,8 @@ export let curios_database = {
         Necklace: ["minecraft:air"],
         Foot: ["minecraft:air"],
         Spellbook: ["minecraft:air"],
-        Charm: ["minecraft:air"]
+        Charm: ["minecraft:air"],
+        Special: ["minecraft:air"]
     },
     maxItemSlot: {}
 };

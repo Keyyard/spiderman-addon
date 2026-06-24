@@ -3,6 +3,9 @@
   "texture_data": {
     "made_in_heaven": {
       "textures": "textures/items/made_in_heaven"
+    },
+    "artifacts_dummy_chest": {
+      "textures": "textures/blocks/normal"
     }
   }
 }

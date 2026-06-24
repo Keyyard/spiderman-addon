@@ -1,0 +1,26 @@
+{
+	"format_version": "1.21.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "curio:ragewatch",
+			"menu_category": {
+				"category": "equipment"
+			}
+		},
+		"components": {
+			"minecraft:icon": "rage_watch",
+			"minecraft:display_name": {
+				"value": "Rage Watch"
+			},
+			"minecraft:max_stack_size": 1,
+			"minecraft:hand_equipped": true,
+			"minecraft:tags": {
+				"tags": [ 
+					"curios:is_trinket",
+					"curios:EventEquip:rage_logic",
+					"curios:EventUnequip:rage_logic"
+				]
+			}
+		}
+	}
+}

@@ -13,6 +13,9 @@
 				"default": "geometry.mimic"
 			},
 			"scripts": {
+				"initialize": [
+					"variable.has_target = 0;" 
+				],
 				"animate": [
 					"mimic_root_controller"
 				]

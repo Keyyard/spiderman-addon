@@ -1,0 +1,26 @@
+{
+	"format_version": "1.21.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "curio:killer_queen_btd",
+			"menu_category": {
+				"category": "equipment"
+			}
+		},
+		"components": {
+			"minecraft:icon": "bite_the_dust",
+			"minecraft:display_name": {
+				"value": "Killer Queen: Bite the Dust"
+			},
+			"minecraft:max_stack_size": 1,
+			"minecraft:hand_equipped": true,
+			"minecraft:tags": {
+				"tags": [ 
+					"curios:is_trinket",
+					"curios:EventEquip:btd_logic",
+					"curios:EventUnequip:btd_logic"
+				]
+			}
+		}
+	}
+}

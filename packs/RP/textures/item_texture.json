@@ -11,6 +11,9 @@
     "invisicloak": {
       "textures": "textures/items/invisicloak"
     },
+    "copper_rocket": {
+      "textures": "textures/items/copper_rocket"
+    },
 
     "evolve_badget_1": {
       "textures": "textures/items/evolve_badget"
@@ -25,11 +28,27 @@
     },
 
     "evolve_badget_4": {
-      "textures": "textures/items/evolve_badget_4"
+      "textures": "textures/items/fallen_belief"
     },
 
     "evolve_badget_5": {
       "textures": "textures/items/silk_amount"
+    },
+
+    "torch_placer": {
+      "textures": "textures/items/torch_placer"
+    },
+    "ender_belt": {
+      "textures": "textures/items/ender_belt"
+    },
+    "rage_watch": {
+      "textures": "textures/items/rage_watch"
+    },
+    "killer_queen": {
+      "textures": "textures/items/killer_queen"
+    },
+    "bite_the_dust": {
+      "textures": "textures/items/bite_the_dust"
     },
     
     "curios": {

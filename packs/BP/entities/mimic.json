@@ -44,12 +44,6 @@
 				},
 				"minecraft:jump.static": {},
 				"minecraft:annotation.break_door": {},
-				/* 
-				"minecraft:behavior.random_stroll": {
-					"priority": 7,
-					"speed_multiplier": 1
-				},
-				 */
 				"minecraft:behavior.hurt_by_target": {
 					"priority": 1
 				},
@@ -61,11 +55,6 @@
 					"yd": 0.4,
 					"must_be_on_ground": true
 				},
-				/* 
-				"minecraft:follow_range": {
-					"value": 15
-				},
-				 */
 				"minecraft:navigation.walk": {
 					"is_amphibious": true,
 					"can_pass_doors": true,
@@ -140,7 +129,7 @@
 				"damage": 3
 			},
 			"minecraft:loot": {
-				"table": "loot_tables/artifacts/entities/mimic.json"
+				"table": "loot_tables/entities/mimic.json"
 			},
 			"minecraft:despawn": {
 				"despawn_from_distance": {}
