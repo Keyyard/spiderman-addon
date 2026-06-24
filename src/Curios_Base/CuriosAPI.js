@@ -2,6 +2,7 @@
 
 import { world, system, EquipmentSlot, ItemStack, ItemTypes } from "@minecraft/server";
 import { Vector } from "../Vector3";
+import { GetLoreById } from "../Ults/LoreMapDB";
 
 export const ACCESORIES_SLOT_INT = [
     "Face", "Hat", "Necklace", "Bracelet", "Back", "Bracelet", "Hand", "Belt",
@@ -498,14 +499,20 @@ export function tickPlayerLoop() {
                         // If it doesn't have the Slot header yet
                         if (!currentLore.some(line => line.includes("§6Slot:"))) {
                             
-                            // This builds the key automatically, e.g., "item.curio:ragewatch.desc"
-                            const autoKey = `item.${item.typeId}.desc`;
+                            // 1. Get the description lines (this is an array)
+                            const descriptionLines = GetLoreById(item.typeId);
+
+                            if (descriptionLines) {
+                                // 2. Use '...' to spread the lines so they aren't nested
+                                item.setLore([slotLine, ...descriptionLines]);
+                                inventory.setItem(slotIdx, item);
+                            } else {
+                                // Fallback if no description is found in the DB
+                                item.setLore([slotLine]);
+                                inventory.setItem(slotIdx, item);
+                            }
                             
-                            // Set the lore: Line 1 is the Slot, Line 2 is the translation key
-                            item.setLore([slotLine, autoKey]);
-                            inventory.setItem(slotIdx, item);
-                            
-                            playerData.sendMessage(`§a[Curios] LoreDebug ${item.getLore()}`);
+                            //playerData.sendMessage(`§a[Curios] LoreDebug ${item.getLore()}`);
                         }
                     }
 
