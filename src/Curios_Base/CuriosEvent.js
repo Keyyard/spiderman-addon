@@ -3,6 +3,7 @@ import { curiosDeathRegistry, curiosEquipRegistry, curiosUnequipRegistry } from 
 import { Relics } from "./CuriosDatabase.js"; // Note: Adjust name if yours is CuriosDatabase.js
 
 const activeRegistry = new Map();
+const hotbarCache = new Map(); // Optimization: Stores Set of item IDs currently in hotbar
 
 export function initRelicEngine() {
     for (const relic of Relics) {
@@ -24,13 +25,24 @@ export function initRelicEngine() {
     }
 }
 
+// Optimization: Refresh the hotbar cache for a player
+function updateHotbarCache(player) {
+    const inv = player.getComponent("minecraft:inventory")?.container;
+    if (!inv) return;
+    
+    const items = new Set();
+    for (let i = 0; i < 9; i++) {
+        const item = inv.getItem(i);
+        if (item) items.add(item.typeId);
+    }
+    hotbarCache.set(player.id, items);
+}
+
 // Right-click logic
 world.afterEvents.itemUse.subscribe((e) => {
     const relic = Relics.find(r => r.identifier === e.itemStack.typeId);
     if (relic) relic.onUse(e.source, e.itemStack);
 });
-
-
 
 
 //Please remove this part if you don't want to use the Evolve System. 
@@ -46,9 +58,16 @@ system.runInterval(() => {
     for (const player of world.getAllPlayers()) {
         const pid = player.id;
         
-        // 1. CURIOS PASSIVE TICK (Items in Curio Slots)
+        // Optimization: Only update hotbar cache every 10 ticks (0.5s)
+        if (tick % 10 === 0) updateHotbarCache(player);
+        const cachedHotbar = hotbarCache.get(pid);
+
+        // 1. CURIOS PASSIVE TICK (Items in Curio Slots OR Hotbar)
         for (const relic of Relics) {
-            if (activeRegistry.get(relic.eventKey)?.has(pid)) {
+            const isEquipped = activeRegistry.get(relic.eventKey)?.has(pid);
+            const isInHotbar = cachedHotbar?.has(relic.identifier);
+
+            if (isEquipped || isInHotbar) {
                 relic.onTick(player);
             }
         }
@@ -85,11 +104,5 @@ world.afterEvents.entityDie.subscribe((ev) => {
 }, { entityTypes: ["minecraft:player"] });
 
 //---------------------------------------------//
-
-
-
-
-
-
 
 initRelicEngine();

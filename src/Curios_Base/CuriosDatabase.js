@@ -10,6 +10,7 @@ import { KillerQueenLogic } from "../Passive_Relic/KillerQueenLogic.js";
 import { SpiderBraceletLogic } from "../Active_Relic/SpiderBraceletLogic.js";
 import { BiteTheDustLogic } from "../Active_Relic/BiteTheDustLogic.js";
 import { ReverseWatchLogic } from "../Active_Relic/ReverseWatchLogic.js";
+import { CopperRocketWandLogic } from "../Active_Relic/CopperRocketWandLogic.js";
 
 
 // --- EVOLVE RELICS ---
@@ -32,10 +33,11 @@ export const Relics = [
     new TorchPlacerLogic(),
     new EnderBeltLogic(),
     new KillerQueenLogic(),
-    new ReverseWatchLogic(),
-
+    
     new SpiderBraceletLogic(),
     new BiteTheDustLogic(),
+    new ReverseWatchLogic(),
+    new CopperRocketWandLogic(),
 
     new AncientBadgeLogic(),
     new MagicBadgeLogic(),

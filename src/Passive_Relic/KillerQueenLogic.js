@@ -6,7 +6,7 @@ export class KillerQueenLogic extends CuriosEventBase {
     constructor() {
         super("curio:killer_queen", "kq_logic");
         this.EXPLOSION_RADIUS = 4;
-        this.AOE_DAMAGE = 15;
+        this.AOE_DAMAGE = 2;
 
         // Listen for projectile hits
         world.afterEvents.projectileHitBlock.subscribe((ev) => this.handleHit(ev));

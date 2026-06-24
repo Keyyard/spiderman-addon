@@ -16,7 +16,7 @@
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {
 				"tags": [ 
-					"curios:is_trinket",
+					"curios:is_bracelet",
 					"curios:EventEquip:rage_logic",
 					"curios:EventUnequip:rage_logic"
 				]

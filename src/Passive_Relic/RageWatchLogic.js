@@ -7,7 +7,8 @@ export class RageWatchLogic extends CuriosEventBase {
         super("curio:ragewatch", "rage_logic");
         
         // Listen for damage globally
-        world.afterEvents.entityHurt.subscribe((event) => {
+        world.afterEvents.entityHurt.subscribe((event) => 
+        {
             const player = event.hurtEntity;
             
             // Ensure it's a player and they are wearing the Rage Watch

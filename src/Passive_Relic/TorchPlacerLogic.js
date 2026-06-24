@@ -1,4 +1,4 @@
-import { EquipmentSlot, ItemTypes } from "@minecraft/server";
+import { world, EquipmentSlot, ItemTypes } from "@minecraft/server";
 import { CuriosEventBase } from "../Curios_Base/CuriosEventBase.js";
 import { CheckLightEvent, LightCondition } from "../Ults/LightInteract.js";
 
