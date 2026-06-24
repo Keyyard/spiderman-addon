@@ -1,2 +1,18 @@
-item.nvy:spider_bracelet.name=Spider Bracelet
+item.curio:spider_bracelet.name=Spider Bracelet
 item.nvy:curios.name=Accessories
+
+## Curios Descriptions
+item.curio:copper_rocket_wand.desc=§7Right-click to perform a §e Dash/Boosts §bElytra§7.\n§6⚙ Auto-repairs with Copper Nuggets each 2 seconds
+item.curio:enderbelt.desc=§7 A forgotten belt that contain enderman secret technique§7.\n§6 Sneak while use ender pearl will instantly teleport player 25 blocks straight
+item.curio:evolve_badget_1.desc=§7I wonder what the hidden behind this§7.
+item.curio:evolve_badget_2.desc=§7A relic that contain Relic Power, I wonder what Relics actually for §7.
+item.curio:evolve_badget_3.desc=§7A new hero ascended, strike down the worst Catastrophe§7.\n§6 +Immune to fall damage
+item.curio:evolve_badget_4.desc=§7Through glory and ashes, A Divine path shall revealed§7.\n§6A hero fallen, cursed by evil
+item.curio:made_in_heaven.desc=§7Peace for humanity§7.
+item.curio:invisicloak.desc=§7Batman prototype item§7.\n§6Invisible while in the dark
+item.curio:killer_queen.desc=§7 To keep an ordinary life, we need to delete the problem in silent§7.\n§6 Every projectile now turn to a silent bomb, destroy items or blocks
+item.curio:killer_queen_btd.desc=§7Killer Queen third bomb§7.\n§6Ignore the Death and wake up at comfy home\n§6Sneak + Right Click to place the time anchor
+item.curio:ragewatch.desc=§7We dont have that much time, dont block my way§7.\n§6Player when get hitted will gain Strength effect for 5 secs, stackable
+item.curio:reverse_watch.desc=§7 A watch that contain space and time ? too OP §7.\n§6 Keep on hotbar, Right Click to Reverse the time
+item.curio:spider_bracelet.desc=§7Spooder man§7.\n§6Right click to swing\n§6Hold it in curios inventory to get Spider Power !!!!
+item.curio:torchplacer.desc=§7Scare of the dark ? dont worry, Torch placer 3000 is here§7.\n§6⚙ have torch on ur hotbar and bye bye darkness

@@ -481,22 +481,49 @@ export function tickPlayerLoop() {
                 player_has_curios_temp[pid] = false;
             }
 
-            // --- SECTION 3: DYNAMIC LORE ---
-            for (let i = 0; i < 6; i++) {
-                let item = inventory.getSlot(i + part * 6);
-                if (item.hasItem() && item != undefined && item_category[item.typeId] != undefined) {
-                    let lores = item.getLore();
-                    if (!lores.some(l => l.startsWith("§r§6Slot:§e "))) {
-                        let slot_name = "§r§6Slot:§e " + item_category[item.typeId].join(" ");
-                        lores.unshift(slot_name);
-                        item.setLore(lores);
+            // --- SECTION 3: DYNAMIC CURIO LORE ---
+            try {
+                let part = system.currentTick % 6; 
+                let inventory = playerData.getComponent("minecraft:inventory").container;
+
+                for (let i = 0; i < 6; i++) {
+                    const slotIdx = i + (part * 6);
+                    if (slotIdx >= inventory.size) continue;
+                    let item = inventory.getItem(slotIdx);
+
+                    if (item && item_category[item.typeId] != undefined) {
+                        let currentLore = item.getLore();
+                        const slotLine = "§r§6Slot: §e" + item_category[item.typeId].join(", ");
+
+                        // If it doesn't have the Slot header yet
+                        if (!currentLore.some(line => line.includes("§6Slot:"))) {
+                            
+                            // This builds the key automatically, e.g., "item.curio:ragewatch.desc"
+                            const autoKey = `item.${item.typeId}.desc`;
+                            
+                            // Set the lore: Line 1 is the Slot, Line 2 is the translation key
+                            item.setLore([slotLine, autoKey]);
+                            inventory.setItem(slotIdx, item);
+                            
+                            playerData.sendMessage(`§a[Curios] LoreDebug ${item.getLore()}`);
+                        }
+                    }
+
+                    // 2. Curio Item Protection
+                    if (item && item.typeId == "nvy:curios") {
+                        if (player_has_curios_temp[pid]) { 
+                            inventory.setItem(slotIdx, undefined); 
+                        } else { 
+                            player_has_curios_temp[pid] = true; 
+                        }
                     }
                 }
-                if (item.hasItem() && item.typeId == "nvy:curios") {
-                    if (player_has_curios_temp[pid]) { inventory.setItem(i + part * 6); } 
-                    else { player_has_curios_temp[pid] = true; }
-                }
+            } catch (error) {
+                playerData.sendMessage("§cLore Logic Error: " + error);
             }
+
+
+            
         } catch (error) { }
 
         player_list_id.push(pid);
