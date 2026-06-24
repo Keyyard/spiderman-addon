@@ -12,6 +12,12 @@
 			"minecraft:display_name": {
 				"value": "Hero Badge"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7A new hero ascended, strike down the worst Catastrophe§7.",
+					"§6 +Immune to fall damage"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:wearable": {

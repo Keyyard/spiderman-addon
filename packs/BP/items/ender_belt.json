@@ -12,6 +12,12 @@
 			"minecraft:display_name": {
 				"value": "Ender Belt"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7 A forgotten belt that contain enderman secret technique§7.",
+					"§6 Sneak while use ender pearl will instantly teleport player 25 blocks straight"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {

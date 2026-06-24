@@ -12,6 +12,13 @@
 			"minecraft:display_name": {
 				"value": "Spider Bracelet"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7Spooder man§7.",
+					"§6Right click to swing",
+					"§6Hold it in curios inventory to get Spider Power !!!!"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {

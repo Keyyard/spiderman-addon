@@ -12,6 +12,13 @@
 			"minecraft:display_name": {
 				"value": "Killer Queen: Bite the Dust"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7Killer Queen third bomb§7.",
+					"§6Ignore the Death and wake up at comfy home",
+					"§6Sneak + Right Click to place the time anchor"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {

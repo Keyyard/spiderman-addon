@@ -12,6 +12,12 @@
 			"minecraft:display_name": {
 				"value": "Killer Queen"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7 To keep an ordinary life, we need to delete the problem in silent§7.",
+					"§6 Every projectile now turn to a silent bomb, destroy items or blocks"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {

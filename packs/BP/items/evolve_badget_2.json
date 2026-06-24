@@ -12,6 +12,11 @@
 			"minecraft:display_name": {
 				"value": "Magic Badge"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7A relic that contain Relic Power, I wonder what Relics actually for §7."
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:wearable": {

@@ -12,6 +12,12 @@
 			"minecraft:display_name": {
 				"value": "Fallen Belief"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7Through glory and ashes, A Divine path shall revealed§7.",
+					"§6A hero fallen, cursed by evil"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:wearable": {

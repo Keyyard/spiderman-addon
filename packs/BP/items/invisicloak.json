@@ -12,6 +12,12 @@
 			"minecraft:display_name": {
 				"value": "Invisicloak"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7Batman prototype item§7.",
+					"§6Invisible while in the dark"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {

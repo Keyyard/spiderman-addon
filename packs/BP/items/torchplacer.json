@@ -12,6 +12,12 @@
 			"minecraft:display_name": {
 				"value": "Torch Placer 3000"
 			},
+			"minecraft:lore": {
+				"value": [
+					"§7Scare of the dark ? dont worry, Torch placer 3000 is here§7.",
+					"§6⚙ have torch on ur hotbar and bye bye darkness"
+				]
+			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:hand_equipped": true,
 			"minecraft:tags": {
