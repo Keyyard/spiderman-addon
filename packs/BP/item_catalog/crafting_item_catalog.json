@@ -1,0 +1,34 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:crafting_items_catalog": {
+    "categories": [
+      {
+        "category_name": "equipment",
+        "groups": [
+          {
+            "group_identifier": {
+              "icon": "curio:made_in_heaven",
+              "name": "bey:relics"
+            },
+            "items": [
+              "curio:made_in_heaven",
+              "curio:copper_rocket_wand",
+              "curio:enderbelt",
+              "curio:evolve_badget_1",
+              "curio:evolve_badget_2",
+              "curio:evolve_badget_3",
+              "curio:evolve_badget_4",
+              "curio:invisicloak",
+              "curio:killer_queen_btd",
+              "curio:killer_queen",
+              "curio:ragewatch",
+              "curio:reverse_watch",
+              "curio:spider_bracelet",
+              "curio:torchplacer"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
