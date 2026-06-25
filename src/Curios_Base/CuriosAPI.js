@@ -591,25 +591,45 @@ export function tickPlayerLoop() {
                     let isItemValid = true;
 
                     // 1. VALIDATION: CATEGORY CHECK
-                    if (item != undefined && !curios_database.register[ACCESORIES_SLOT_INT[i]].includes(item.typeId)) {
-                        let swaped = false;
-                        const categories = item_category[item.typeId];
-                        if (categories != undefined) {
-                            for (const category of categories) {
-                                for (const slot of AccesoriesSlotInt[category]) {
-                                    if (container.getItem(slot) == undefined) {
-                                        container.swapItems(i, slot, container);
-                                        swaped = true;
-                                        break;
+                    if (item != undefined) {
+                        const categories = item_category[item.typeId] || [];
+                        const isSpecial = categories.includes("Special"); //Just my custom stuffs
+                        const isAllowedInThisSlot = curios_database.register[ACCESORIES_SLOT_INT[i]]?.includes(item.typeId);
+
+                        // If it's tagged "Special", treat it as invalid for the UI (push it out)
+                        // OR if it's just a normal vanilla item / wrong slot item
+                        if (isSpecial || !isAllowedInThisSlot) {
+                            let swaped = false;
+
+                            // Only try to auto-move the item if it's NOT a "Special" item
+                            if (!isSpecial && categories.length > 0) {
+                                for (const category of categories) {
+                                    // Don't try to move items into the "Special" category as it has no UI slots
+                                    if (category === "Special") continue;
+
+                                    const targetSlots = AccesoriesSlotInt[category];
+                                    if (!targetSlots) continue;
+
+                                    for (const slot of targetSlots) {
+                                        if (container.getItem(slot) == undefined) {
+                                            container.swapItems(i, slot, container);
+                                            swaped = true;
+                                            break;
+                                        }
                                     }
+                                    if (swaped) break;
                                 }
-                                if (swaped) break;
                             }
+
+                            // If it's Special OR no valid slot was found, eject it like a vanilla item
+                            if (!swaped) { 
+                                dimension.spawnItem(item, playerData.location); 
+                            }
+
+                            container.setItem(i); // Clear the slot
+                            item = undefined;     // Stop further logic for this tick
+                            isItemValid = false;
                         }
-                        if (!swaped) { dimension.spawnItem(item, playerData.location); }
-                        container.setItem(i); // Clear the wrong slot
-                        item = undefined;     // Prevent events from firing
-                        isItemValid = false;
                     }
 
                     // 2. VALIDATION: MAX ITEM LIMIT
