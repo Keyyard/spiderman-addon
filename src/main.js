@@ -13,6 +13,7 @@ import {
   tickSyncPlayerTags,
 } from "./Curios_Base/CuriosAPI";
 import "./Curios_Base/CuriosEvent";
+import "./Curios_Base/CuriosCommand";
 import { MimicKill } from "./Mimic/Mimic";
 import { SummonMimic } from "./Mimic/Summon";
 
