@@ -54,6 +54,14 @@
       "textures": "textures/items/bite_the_dust"
     },
     
+    
+    "spawner_bar": {
+      "textures": "textures/items/spawner_bar"
+    },
+    "mimic_dust": {
+      "textures": "textures/items/mimic_dust"
+    },
+    
     "curios": {
       "textures": "textures/items/curios"
     }
