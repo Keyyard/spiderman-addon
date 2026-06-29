@@ -78,8 +78,8 @@
         "height": 1
       },
       "minecraft:health": {
-        "value": 30,
-        "max": 30
+        "value": 999,
+        "max": 999
       },
       "minecraft:behavior.nearest_attackable_target": {
         "priority": 2,

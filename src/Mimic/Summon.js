@@ -1,4 +1,4 @@
-import { BlockComponentTypes, system } from "@minecraft/server";
+import { system, world } from "@minecraft/server";
 
 const RELICS = [
   "curio:made_in_heaven",
@@ -23,12 +23,12 @@ const SPAWNER_DROP_CHANCE = 0.4;
 
 // --- 1. HANDLE SPAWNER DROP ---
 world.afterEvents.playerBreakBlock.subscribe((event) => {
-    const { block, dimension, brokenBlockPermutation } = event;
-    if (brokenBlockPermutation.type.typeId === "minecraft:mob_spawner") {
-        if (Math.random() < SPAWNER_DROP_CHANCE) {
-            dimension.spawnItem(new ItemStack(SPAWNER_BAR, 1), block.location);
-        }
+  const { block, dimension, brokenBlockPermutation } = event;
+  if (brokenBlockPermutation.type.typeId === "minecraft:mob_spawner") {
+    if (Math.random() < SPAWNER_DROP_CHANCE) {
+      dimension.spawnItem(new ItemStack(SPAWNER_BAR, 1), block.location);
     }
+  }
 });
 
 // --- 2. SUMMON AND SCALE MIMIC ---
@@ -36,7 +36,7 @@ export class SummonMimic {
   static onInteract(player, block, itemStack) {
     if (!itemStack || itemStack.typeId !== REQUIRED_ITEM) return;
 
-    const inv = block.getComponent(BlockComponentTypes.Inventory);
+    const inv = block.getComponent("inventory");
     if (!inv?.container) return;
 
     const container = inv.container;
@@ -57,6 +57,13 @@ export class SummonMimic {
       "artifacts:mimic",
       block.location,
     );
+
+    const health = entity.getComponent("health");
+    if (health) {
+      health.setCurrentValue(20 + hasRelic * 10);
+    }
+    console.log(20 + hasRelic * 10);
+
     entity.setDynamicProperty("hasRelic", hasRelic);
 
     block.setType("minecraft:air");
