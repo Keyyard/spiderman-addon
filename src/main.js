@@ -12,9 +12,10 @@ import {
   tickPlayerLoop,
   tickSyncPlayerTags,
 } from "./Curios_Base/CuriosAPI";
-import "./Curios_Base/CuriosEvent";
 import "./Curios_Base/CuriosCommand";
+import "./Curios_Base/CuriosEvent";
 import { MimicKill } from "./Mimic/Mimic";
+import "./Mimic/MimicHurt";
 import { SummonMimic } from "./Mimic/Summon";
 
 world.afterEvents.worldLoad.subscribe(() => {
