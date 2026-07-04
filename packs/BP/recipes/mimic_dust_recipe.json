@@ -4,6 +4,14 @@
     "description": {
       "identifier": "curio:mimic_dust_recipe"
     },
+    "unlock": [
+      {
+        "item": "minecraft:diamond"
+      },
+      {
+        "item": "curio:spawner_bar"
+      }
+    ],
     "tags": ["crafting_table"],
     "pattern": [
       " D ",

@@ -14,9 +14,7 @@ import {
 } from "./Curios_Base/CuriosAPI";
 import "./Curios_Base/CuriosCommand";
 import "./Curios_Base/CuriosEvent";
-import { MimicKill } from "./Mimic/Mimic";
-import "./Mimic/MimicHurt";
-import { SummonMimic } from "./Mimic/Summon";
+import { MimicManager } from "./Mimic/MimicManager";
 
 world.afterEvents.worldLoad.subscribe(() => {
   handleWorldLoad();
@@ -71,12 +69,17 @@ world.afterEvents.playerLeave.subscribe((s) => {
   handlePlayerLeave(s);
 });
 
+
+
 world.afterEvents.playerInteractWithBlock.subscribe((s) => {
-  SummonMimic.onInteract(s.player, s.block, s.itemStack);
+   MimicManager.onInteract(s.player, s.block, s.itemStack);
 });
 world.afterEvents.entityDie.subscribe((s) => {
-  MimicKill.onKill(s.deadEntity);
+  MimicManager.onKill(s.deadEntity);
 });
+
+
+
 
 system.afterEvents.scriptEventReceive.subscribe(
   (s) => {
