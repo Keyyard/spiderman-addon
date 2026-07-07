@@ -14,7 +14,10 @@ import {
 } from "./Curios_Base/CuriosAPI";
 import "./Curios_Base/CuriosCommand";
 import "./Curios_Base/CuriosEvent";
+import "./Ults/ItemAnimPlay";
 import { MimicManager } from "./Mimic/MimicManager";
+
+
 
 world.afterEvents.worldLoad.subscribe(() => {
   handleWorldLoad();
